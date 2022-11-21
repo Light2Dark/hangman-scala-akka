@@ -11,3 +11,5 @@ git commit -m "message" (commiting changes)
 git pull
 
 git push
+
+### Notes
