@@ -5,3 +5,5 @@ git add . (adding all files)
 git commit -m "message" (commiting changes)
 git pull
 git push
+
+### Notes
