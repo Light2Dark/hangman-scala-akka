@@ -8,14 +8,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainHangmanController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LobbyController">
    <children>
       <Text layoutX="341.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lobby">
          <font>
             <Font name="Ink Free" size="68.0" />
          </font>
       </Text>
-      <Button layoutX="63.0" layoutY="73.0" mnemonicParsing="false" text="&lt; Back to Menu">
+      <Button layoutX="63.0" layoutY="73.0" mnemonicParsing="false" onAction="#backToMenu" text="&lt; Back to Menu">
          <font>
             <Font name="Ink Free" size="15.0" />
          </font>
@@ -68,7 +68,7 @@
             </Button>
          </children>
       </GridPane>
-      <Button layoutX="616.0" layoutY="119.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="166.0" text="Create New Game">
+      <Button layoutX="616.0" layoutY="119.0" mnemonicParsing="false" onAction="#createNewGame" prefHeight="30.0" prefWidth="166.0" text="Create New Game">
          <font>
             <Font name="Gill Sans MT" size="16.0" />
          </font>
