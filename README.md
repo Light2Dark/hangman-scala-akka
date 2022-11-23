@@ -3,7 +3,7 @@ This is a project for the Distributed Systems subject, to build a distributed sy
 
 ### Akka
 Akka is a toolkit to build distributed message driven applications for Scala & Java.
-[https://akka.io/](Akka Official Docs)
+[Akka Official Docs](https://akka.io/)
 
 ## Developing on this project
 
