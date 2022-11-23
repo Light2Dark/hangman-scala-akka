@@ -1,4 +1,9 @@
 # Hangman Scala App
+This is a project for the Distributed Systems subject, to build a distributed system using Scala and Akka. We made a multiplayer Hangman game!
+
+### Akka
+Akka is a toolkit to build distributed message driven applications for Scala & Java.
+[https://akka.io/](Akka Official Docs)
 
 ## Developing on this project
 
