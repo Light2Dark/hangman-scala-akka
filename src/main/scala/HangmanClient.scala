@@ -5,7 +5,7 @@ import scalafxml.core.{FXMLLoader, NoDependencyResolver}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
 
-object Hangman extends JFXApp {
+object HangmanClient extends JFXApp {
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
   loader.load()
