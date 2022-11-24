@@ -20,15 +20,15 @@ object HangmanServer {
   //handles client joining a room
   case class JoinRoom(name: String, from: ActorRef[HangmanClient.Command], room: Room) extends Command
   //handles client leaving a room
-  case class LeaveRoom((name: String, from: ActorRef[HangmanClient.Command], room: Room) extends Command)
+  case class LeaveRoom(name: String, from: ActorRef[HangmanClient.Command], room: Room) extends Command
   //handles client guessing an alphabet
   case class GuessAlphabet(name: String, from: ActorRef[HangmanClient.Command], alphabet: Char, game: Game) extends Command
   //handles client closing the application
   case class Leave(name: String, from: ActorRef[HangmanClient.Command]) extends Command
 
-  val usersOnMainMenu: User[] = []
+  val usersOnMainMenu: List[User] = []
   val lobby = new ObservableHashSet[Room]
-  val games: Game[] = []
+  val games: List[Game] = []
 
   lobby.onChange{(ns, _) =>
     for(user <- usersOnMainMenu){

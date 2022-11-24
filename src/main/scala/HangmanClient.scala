@@ -25,7 +25,7 @@ object HangmanClient {
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
     case object StartLoadLobby extends Command
     //lobby details sent from server to client actor
-    case class Lobby(lobby: Room[]) extends Command
+    case class Lobby(lobby: List[Room]) extends Command
     //sent from the controller to the client actor to start the process of creating a room
     case object StartCreateRoom extends Command
     //room details upon successful creation, sent from server to client actor
