@@ -11,6 +11,7 @@ object Hangman extends JFXApp {
 
   greeterMain ! HangmanClient.start
 
+
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
   loader.load()

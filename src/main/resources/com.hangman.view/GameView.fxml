@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+   <children>
+      <Button layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#quitGame" text="Give Up">
+         <font>
+            <Font name="Ink Free" size="17.0" />
+         </font>
+      </Button>
+      <Text layoutX="69.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1">
+         <font>
+            <Font name="HoloLens MDL2 Assets" size="18.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="161.0" fitWidth="56.0" layoutX="75.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/player_one_figure-removebg.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="129.0" fitWidth="63.0" layoutX="720.0" layoutY="392.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/player_two_figure-removebg.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="720.0" layoutY="551.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
+         <font>
+            <Font name="HoloLens MDL2 Assets" size="18.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="209.0" fitWidth="246.0" layoutX="310.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/complete-hangman.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutX="159.0" layoutY="368.0" prefHeight="147.0" prefWidth="532.0" spacing="6.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="19.0">
+               <children>
+                  <Button mnemonicParsing="false" text="A">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="E">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="I">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="O">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="U">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="14.0">
+               <children>
+                  <Button mnemonicParsing="false" text="B">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="C">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="D">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="F">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="G">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="H">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="J">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="396.0" layoutY="10.0" mnemonicParsing="false" text="K">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="L">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="17.0">
+               <children>
+                  <Button mnemonicParsing="false" text="M">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="N">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="P">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="Q">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="R">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="284.0" layoutY="10.0" mnemonicParsing="false" text="S">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="T">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="V">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="13.0">
+               <children>
+                  <Button mnemonicParsing="false" text="W">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="X">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="Y">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="Z">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Text layoutX="353.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="_  _  _  _  _">
+         <font>
+            <Font name="HoloLens MDL2 Assets" size="25.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
