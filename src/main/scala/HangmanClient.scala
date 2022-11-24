@@ -1,4 +1,3 @@
-package com.hep99
 import akka.actor.typed.{ActorRef, PostStop, ActorSystem, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.receptionist.{Receptionist,ServiceKey}
@@ -12,7 +11,6 @@ import akka.cluster.ClusterEvent.ReachableMember
 import akka.cluster.ClusterEvent.UnreachableMember
 import akka.cluster.ClusterEvent.MemberEvent
 import akka.actor.Address
-import com.hep88.Upnp._
 
 object HangmanClient {
     sealed trait Command
@@ -38,7 +36,7 @@ object HangmanClient {
     //sent from controller to client actor to make a guess
     case class Guess(alphabet: Char) extends Command
     //sent from server to client after the game ends. 
-    case class GameEnded(won: Bool)
+    case class GameEnded(won: Boolean) extends Command
 
     final case object FindTheServer extends Command
     private case class ListingResponse(listing: Receptionist.Listing) extends Command
@@ -61,17 +59,17 @@ object HangmanClient {
 //     }  
 //   }
 
-  var defaultBehavior: Option[Behavior[HangmanClient.Command]] = None
-  var remoteOpt: Option[ActorRef[HangmanServer.Command]] = None 
-  var nameOpt: Option[String] = None
+    var defaultBehavior: Option[Behavior[HangmanClient.Command]] = None
+    var remoteOpt: Option[ActorRef[HangmanServer.Command]] = None 
+    var nameOpt: Option[String] = None
 
     def lobbyBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
-            case Lobby(target, content) =>
+            case Lobby(roomList) =>
                 //update the list of rooms in the lobby
                 Behaviors.same
 
-            case StartCreateRoom(msg, from) =>
+            case StartCreateRoom =>
                 //send a create room msg to the server
                 Behaviors.same
 
@@ -99,16 +97,16 @@ object HangmanClient {
 
     def waitingBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
-            case StartLeaveRoom(target, content) =>
+            case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
                 Behaviors.same
 
-            case Lobby(target, content) =>
+            case Lobby(roomList) =>
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 lobbyBehavior()
 
-            case GameState(msg, from) =>
+            case GameState(game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 inGameBehavior()
@@ -124,15 +122,15 @@ object HangmanClient {
 
     def inGameBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
-            case GameState(target, content) =>
+            case GameState(game) =>
                 //update the UI to reflect the latest game state
                 Behaviors.same
 
-            case Guess(msg, from) =>
+            case Guess(alphabet) =>
                 //send a GuessAlphabet msg to the server
                 Behaviors.same
 
-            case GameEnded(list: Iterable[User]) =>
+            case GameEnded(won) =>
                 //update the UI to show if the players won/lost
                 //the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
                 //but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
@@ -152,8 +150,8 @@ object HangmanClient {
         var counter = 0
         // (1) a ServiceKey is a unique identifier for this actor
 
-       val upnpRef = context.spawn(Upnp(), Upnp.name)
-        upnpRef ! AddPortMapping(20000)
+    //    val upnpRef = context.spawn(Upnp(), Upnp.name)
+    //     upnpRef ! AddPortMapping(20000)
         
           
     // val reachabilityAdapter = context.messageAdapter(ReachabilityChange)
@@ -185,10 +183,6 @@ object HangmanClient {
                         remoteOpt = Some(x)
                     }
                     Behaviors.same
-
-                case StartJoin(name) =>
-                    //get the username from the user, then send a StartLoadLobby msg to context.self
-                     Behaviors.same
 
                 case StartLoadLobby(x) =>
                     //send a LoadLobby msg to the server to get the lobby details

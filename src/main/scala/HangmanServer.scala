@@ -1,13 +1,8 @@
-package com.hep99
 import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.receptionist.{Receptionist,ServiceKey}
-import com.hep99.Model._
-import com.hep88.Upnp
-import com.hep88.Upnp.AddPortMapping
-import com.hep88.MyConfiguration
 import scalafx.collections.ObservableHashSet
 
 object HangmanServer {
@@ -26,9 +21,9 @@ object HangmanServer {
   //handles client closing the application
   case class Leave(name: String, from: ActorRef[HangmanClient.Command]) extends Command
 
-  val usersOnMainMenu: List[User] = []
+  val usersOnMainMenu: List[User] = List()
   val lobby = new ObservableHashSet[Room]
-  val games: List[Game] = []
+  val games: List[Game] = List()
 
   lobby.onChange{(ns, _) =>
     for(user <- usersOnMainMenu){
@@ -40,8 +35,8 @@ object HangmanServer {
 
   def apply(): Behavior[HangmanServer.Command] =
     Behaviors.setup { context =>
-      val upnpRef = context.spawn(Upnp(), Upnp.name)
-      upnpRef ! AddPortMapping(20000)
+      // val upnpRef = context.spawn(Upnp(), Upnp.name)
+      // upnpRef ! AddPortMapping(20000)
 
       context.system.receptionist ! Receptionist.Register(ServerKey, context.self)
       

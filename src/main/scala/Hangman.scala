@@ -6,11 +6,10 @@ import scalafx.Includes._
 import javafx.{scene => jfxs}
 
 object Hangman extends JFXApp {
-  implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-  val greeterMain: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
+  // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
+  // val greeterMain: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
 
-  greeterMain ! HangmanClient.start
-
+  // greeterMain ! HangmanClient.start
 
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
@@ -39,6 +38,6 @@ object Hangman extends JFXApp {
   val mainView = getClass.getResource("com.hangman.view/MainHangmanView.fxml")
   showView(mainView)
 
-  stage.onCloseRequest = handle( {
-  greeterMain.terminate
+  // stage.onCloseRequest = handle( {
+  // greeterMain.terminate
 }
