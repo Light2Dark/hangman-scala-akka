@@ -20,10 +20,8 @@ object HangmanClient {
     // TODO: modify properties of the msgs
     //start the application and initialize the client actor
     case object Start extends Command
-    //get the username from the user, then send a StartLoadLobby msg to context.self, and go to lobby
-    case class StartJoin(name: String) extends Command
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
-    case object StartLoadLobby extends Command
+    case class StartLoadLobby(name: String) extends Command
     //lobby details sent from server to client actor
     case class Lobby(lobby: List[Room]) extends Command
     //sent from the controller to the client actor to start the process of creating a room
