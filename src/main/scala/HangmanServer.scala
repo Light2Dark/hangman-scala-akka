@@ -4,26 +4,27 @@ import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.receptionist.{Receptionist,ServiceKey}
 import scalafx.collections.ObservableHashSet
+import scala.collection.mutable.Set
 
 object HangmanServer {
   //TODO: fix properties of messages
   sealed trait Command
   //handles client loading the lobby
-  case class LoadLobby(name: String, from: ActorRef[HangmanClient.Command]) extends Command
+  case class LoadLobby(user: User) extends Command
   //handles client creating a room
-  case class CreateRoom(name: String, from: ActorRef[HangmanClient.Command]) extends Command
+  case class CreateRoom(user: User) extends Command
   //handles client joining a room
-  case class JoinRoom(name: String, from: ActorRef[HangmanClient.Command], room: Room) extends Command
+  case class JoinRoom(user: User, room: Room) extends Command
   //handles client leaving a room
-  case class LeaveRoom(name: String, from: ActorRef[HangmanClient.Command], room: Room) extends Command
+  case class LeaveRoom(user: User) extends Command
   //handles client guessing an alphabet
-  case class GuessAlphabet(name: String, from: ActorRef[HangmanClient.Command], alphabet: Char, game: Game) extends Command
+  case class GuessAlphabet(user: User, alphabet: Char) extends Command
   //handles client closing the application
-  case class Leave(name: String, from: ActorRef[HangmanClient.Command]) extends Command
+  case class Leave(user: User) extends Command
 
-  val usersOnMainMenu: List[User] = List()
+  val usersOnMainMenu: Set[User] = Set()
   val lobby = new ObservableHashSet[Room]
-  val games: List[Game] = List()
+  val games: Set[Game] = Set()
 
   lobby.onChange{(ns, _) =>
     for(user <- usersOnMainMenu){
@@ -42,29 +43,62 @@ object HangmanServer {
       
       Behaviors.receiveMessage { message =>
         message match {
-            case LoadLobby(name, from) =>
+            case LoadLobby(user) =>
                 //add user to userOnMainMenu list and send them the lobby
+                usersOnMainMenu += user
+                user.ref ! HangmanClient.Lobby(lobby.toList)
                 Behaviors.same
-            case CreateRoom(name, from) =>
+            case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
+                var newRoom = new Room(user)
+                user.ref ! HangmanClient.RoomDetails(newRoom)
+                usersOnMainMenu -= user
+                lobby += newRoom
                 Behaviors.same
-            case LeaveRoom(name, from, room) =>
+            case LeaveRoom(user) =>
                 //add the user to the userOnMainMenu list, update all users on the deleted room
+                usersOnMainMenu += user
+                lobby -= lobby.find(room => room.player == user).get
                 Behaviors.same
-            case JoinRoom(name, from, room) =>
+            case JoinRoom(user, room) =>
                 //create a new game, remove the room from the lobby, send both users into the game by sending them GameState msgs.
+                var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
+                games += newGame
+                lobby -= lobby.find(lobbyRoom => lobbyRoom == room).get
+                room.player.ref ! HangmanClient.GameState(newGame)
+                user.ref ! HangmanClient.GameState(newGame)
                 Behaviors.same 
-            case GuessAlphabet(name, from, alphabet, game) =>
+            case GuessAlphabet(user, alphabet) =>
                 //update game state, inform other player of the update
                 //if game has ended, send a GameEnded msg to the players
+                var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                game.guess(alphabet)
+                game.players.foreach(player => player.ref ! HangmanClient.GameState(game))
+                if (game.isEnded) {
+                  game.players.foreach(player => player.ref ! HangmanClient.GameEnded(game.status))
+                  games -= game
+                  game.players.foreach(player => usersOnMainMenu += player)
+                }
                 Behaviors.same
-            case Leave(name, from) => 
+            case Leave(user) => 
                 //if player is in game, end the game, send the other player back to lobby
                 //if the player is in the main menu, remove him from the usersOnMainMenu list
                 //if the player is in a room, delete the room and inform all users on the main menu about it
+                if (user.status == "inGame") {
+                  var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                  game.players.foreach(player => player.ref ! HangmanClient.GameEnded("The other player disconnected"))
+                  games -= game
+                  game.players.foreach(player => usersOnMainMenu += player)
+                }
+                else if (user.status == "lobby") {
+                  usersOnMainMenu -= user
+                }
+                else if (user.status == "waiting") {
+                  var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player == user).get
+                  lobby -= playerRoom
+                }
                 Behaviors.same
             }
-        
       }
     }
 }

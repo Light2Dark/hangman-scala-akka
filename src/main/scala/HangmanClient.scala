@@ -36,13 +36,15 @@ object HangmanClient {
     //sent from controller to client actor to make a guess
     case class Guess(alphabet: Char) extends Command
     //sent from server to client after the game ends. 
-    case class GameEnded(won: Boolean) extends Command
+    case class GameEnded(reason: String) extends Command
 
     final case object FindTheServer extends Command
     private case class ListingResponse(listing: Receptionist.Listing) extends Command
     //private final case class MemberChange(event: MemberEvent) extends Command
     // private final case class ReachabilityChange(reachabilityEvent: ReachabilityEvent) extends Command
+    //TODO: figure out how to get the actor context for this actor to be used in this
     val lobby = new ObservableHashSet[Room]()
+
 
 //   TODO: decide if we want to implement unreachable
 //    val unreachables = new ObservableHashSet[Address]()
@@ -61,7 +63,7 @@ object HangmanClient {
 
     var defaultBehavior: Option[Behavior[HangmanClient.Command]] = None
     var remoteOpt: Option[ActorRef[HangmanServer.Command]] = None 
-    var nameOpt: Option[String] = None
+    var userOpt: Option[User] = None
 
     def lobbyBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
@@ -75,6 +77,7 @@ object HangmanClient {
 
             case RoomDetails(room) =>
                 //this msg serves as an acknowledgement that the room has been successfully created. Update the UI to show the room 
+                //chg user object state to "waiting"
                 waitingBehavior()
 
             case StartJoinRoom(list: Iterable[User]) =>
@@ -84,13 +87,16 @@ object HangmanClient {
             case GameState(game) =>
                 //this msg serves as an acknowledgement that the user has successfully joined the room
                 //start the game by showing the in game UI
+                //chg user object state to "inGame"
                 inGameBehavior()
+            case _=>
+                Behaviors.unhandled
         }
     }.receiveSignal {
         case (context, PostStop) =>
-            for (name <- nameOpt;
+            for (user <- userOpt;
                 remote <- remoteOpt){
-            remote ! HangmanServer.Leave(name, context.self)
+            remote ! HangmanServer.Leave(user)
             }
             defaultBehavior.getOrElse(Behaviors.same)
     }
@@ -104,18 +110,22 @@ object HangmanClient {
             case Lobby(roomList) =>
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
+                //chg user object state to "lobby"
                 lobbyBehavior()
 
             case GameState(game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
+                //chg user object state to "inGame"
                 inGameBehavior()
+            case _=>
+                Behaviors.unhandled
         }
     }.receiveSignal {
         case (context, PostStop) =>
-            for (name <- nameOpt;
+            for (user <- userOpt;
                 remote <- remoteOpt){
-            remote ! HangmanServer.Leave(name, context.self)
+            remote ! HangmanServer.Leave(user)
             }
             defaultBehavior.getOrElse(Behaviors.same)
     }
@@ -130,17 +140,20 @@ object HangmanClient {
                 //send a GuessAlphabet msg to the server
                 Behaviors.same
 
-            case GameEnded(won) =>
-                //update the UI to show if the players won/lost
+            case GameEnded(reason) =>
+                //update the UI to show if the players won/lost/the other player disconnected
                 //the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
                 //but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
+                //chg user object state to "lobby"
                 lobbyBehavior()
+            case _ =>
+                Behaviors.unhandled
         }
     }.receiveSignal {
         case (context, PostStop) =>
-            for (name <- nameOpt;
+            for (user <- userOpt;
                 remote <- remoteOpt){
-            remote ! HangmanServer.Leave(name, context.self)
+            remote ! HangmanServer.Leave(user)
             }
             defaultBehavior.getOrElse(Behaviors.same)
     }
@@ -184,8 +197,13 @@ object HangmanClient {
                     }
                     Behaviors.same
 
-                case StartLoadLobby(x) =>
+                case StartLoadLobby(name) =>
                     //send a LoadLobby msg to the server to get the lobby details
+                    //a new user object will be created based on the name the user entered into the UI. The 'user' property in this actor
+                    //points to the newly created user. It is therefore possible for the player to return to the main menu, key in another name,
+                    //and create a new user object which this client actor will associate with.
+                    userOpt = Some(new User(name, context.self, "lobby"))
+                    remoteOpt.get ! HangmanServer.LoadLobby(userOpt.get)
                     Behaviors.same
                 
                 case Lobby(lobby) => 
@@ -207,9 +225,9 @@ object HangmanClient {
             }
         }.receiveSignal {
         case (context, PostStop) =>
-            for (name <- nameOpt;
+            for (user <- userOpt;
                 remote <- remoteOpt){
-                remote ! HangmanServer.Leave(name, context.self)
+                remote ! HangmanServer.Leave(user)
             }
             Behaviors.same
         })
