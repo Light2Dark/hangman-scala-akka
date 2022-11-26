@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LobbyController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HowToPlayController">
    <children>
       <Text layoutX="251.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How To Play">
          <font>
@@ -40,7 +40,7 @@
             <Font name="Gill Sans MT" size="24.0" />
          </font>
       </Text>
-      <TextField layoutX="422.0" layoutY="402.0" prefHeight="26.0" prefWidth="189.0" />
+      <TextField fx:id="playerName" layoutX="422.0" layoutY="402.0" prefHeight="26.0" prefWidth="189.0" />
       <Text layoutX="138.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hangman is a 2 player game where you take turns to guess the random word." textAlignment="CENTER" wrappingWidth="578.4600830078125">
          <font>
             <Font name="Ink Free" size="20.0" />
