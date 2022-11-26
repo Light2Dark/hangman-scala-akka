@@ -2,3 +2,8 @@ target
 .bsp
 .idea
 project
+*.excalidraw
+
+# not these files:
+!target/scala-2.12
+!target/scala-2.13
