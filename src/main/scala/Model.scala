@@ -1,5 +1,6 @@
 import akka.actor.typed.ActorRef
 import scala.util.Random
+import scala.collection.mutable.Set
 
 //the status of the user can either be lobby, waiting, or inGame
 case class User(name: String, ref: ActorRef[HangmanClient.Command], status: String) {
@@ -8,10 +9,28 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], status: Stri
   }
 }
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) {
+  val alphabetsToGuess: Set[Char] = {
+    val alphabetSet: Set[Char] = Set()
+    for (alphabet <- wordToGuess) {
+      if (!alphabetSet.apply(alphabet)) {
+        alphabetSet += alphabet
+      }
+    }
+    alphabetSet
+  }
+  
   def guess(alphabet: Char): Unit = {
     //if alphabet is in the wordToGuess, remove guessed alphabet from string, else deduct one life
     //if number of lives == 0 change status to "lost"
     //else if all alphabets have been guessed, change status to "won"
+    if (alphabetsToGuess.apply(alphabet)) {
+      alphabetsToGuess -= alphabet
+    }
+    else {
+      livesLeft -= 1
+    }
+    if (livesLeft == 0) status = "lost"
+    if (alphabetsToGuess.size == 0) status = "won"
   }
 
   def isEnded: Boolean = status != "ongoing"

@@ -89,6 +89,7 @@ object HangmanClient {
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
                 inGameBehavior()
+
             case _=>
                 Behaviors.unhandled
         }
@@ -118,6 +119,7 @@ object HangmanClient {
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
                 inGameBehavior()
+                
             case _=>
                 Behaviors.unhandled
         }
@@ -146,6 +148,7 @@ object HangmanClient {
                 //but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
                 //chg user object state to "lobby"
                 lobbyBehavior()
+
             case _ =>
                 Behaviors.unhandled
         }
