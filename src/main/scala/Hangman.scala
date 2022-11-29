@@ -35,6 +35,27 @@ object Hangman extends JFXApp {
     roots.setCenter(viewRoots)
   }
 
+  def getLobbyController = {
+    val resource = getClass.getResource(s"com.hangman.view/LobbyView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[LobbyController#Controller]()
+    control
+  }
+
+  def getHowToPlayController = {
+    val resource = getClass.getResource(s"com.hangman.view/SetNameView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[HowToPlayController#Controller]()
+    control
+  }
+
+  def getGameController = {
+    val resource = getClass.getResource(s"com.hangman.view/GameView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[GameController#Controller]()
+    control
+  }
+
   val mainView = getClass.getResource("com.hangman.view/MainHangmanView.fxml")
   showView(mainView)
 

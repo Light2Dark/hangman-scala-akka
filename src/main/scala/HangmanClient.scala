@@ -72,11 +72,11 @@ object HangmanClient {
                 var changedRoom: Room = lobby.diff(newLobby).head
                 if (lobby contains changedRoom) {
                     lobby -= changedRoom
-                    LobbyController.deleteRoom(room)
+                    Hangman.getLobbyController.deleteRoom(changedRoom)
                 }
                 else {
                     lobby += changedRoom
-                    LobbyController.addRoom(room)
+                    Hangman.getLobbyController.addRoom(changedRoom)
                 }
                 Behaviors.same
 
@@ -220,10 +220,10 @@ object HangmanClient {
                 
                 case Lobby(newLobby) => 
                     //show lobby UI, update lobby details and chg behavior to lobby behavior
-                    HowToPlayController.changeViewToLobby
+                    Hangman.getHowToPlayController.changeViewToLobby
                     for (room <- newLobby) {
                         lobby += room
-                        LobbyController.addRoom(room)
+                        Hangman.getLobbyController.addRoom(room)
                     }
                     lobbyBehavior()
 
