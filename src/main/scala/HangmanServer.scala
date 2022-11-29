@@ -28,7 +28,7 @@ object HangmanServer {
 
   lobby.onChange{(ns, _) =>
     for(user <- usersOnMainMenu){
-      user.ref ! HangmanClient.Lobby(ns.toList)
+      user.ref ! HangmanClient.Lobby(ns)
     }
   }
 
@@ -46,7 +46,7 @@ object HangmanServer {
             case LoadLobby(user) =>
                 //add user to userOnMainMenu list and send them the lobby
                 usersOnMainMenu += user
-                user.ref ! HangmanClient.Lobby(lobby.toList)
+                user.ref ! HangmanClient.Lobby(lobby)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
