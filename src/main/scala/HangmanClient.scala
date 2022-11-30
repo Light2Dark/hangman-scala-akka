@@ -115,18 +115,21 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
+                context.self ! LeaveRoom(context.self)
                 Behaviors.same
 
             case Lobby(roomList) =>
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
+                getLobbyController()
                 lobbyBehavior()
 
             case GameState(game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
+                getGameController()
                 inGameBehavior()
                 
             case _=>
