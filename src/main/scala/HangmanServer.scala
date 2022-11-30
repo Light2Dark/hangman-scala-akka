@@ -65,6 +65,7 @@ object HangmanServer {
                 var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
                 games += newGame
                 lobby -= lobby.find(lobbyRoom => lobbyRoom == room).get
+                usersOnMainMenu -= user
                 room.player.ref ! HangmanClient.GameState(newGame)
                 user.ref ! HangmanClient.GameState(newGame)
                 Behaviors.same 
@@ -77,7 +78,10 @@ object HangmanServer {
                 if (game.isEnded) {
                   game.players.foreach(player => player.ref ! HangmanClient.GameEnded(game.status))
                   games -= game
-                  game.players.foreach(player => usersOnMainMenu += player)
+                  game.players.foreach(player => {
+                    usersOnMainMenu += player
+                    player.ref ! HangmanClient.Lobby(lobby)
+                  })
                 }
                 Behaviors.same
             case Leave(user) => 
