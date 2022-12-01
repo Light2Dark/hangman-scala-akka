@@ -115,7 +115,7 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
-                context.self ! LeaveRoom(context.self)
+                context.self ! HangmanServer.LeaveRoom(context.self)
                 Behaviors.same
 
             case Lobby(roomList) =>
