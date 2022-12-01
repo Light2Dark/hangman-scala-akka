@@ -72,11 +72,15 @@ object HangmanClient {
                 var changedRoom: Room = lobby.diff(newLobby).head
                 if (lobby contains changedRoom) {
                     lobby -= changedRoom
-                    Hangman.getLobbyController.deleteRoom()
+                    Platform.runLater {
+                        Hangman.getLobbyController.deleteRoom()
+                    }
                 }
                 else {
                     lobby += changedRoom
-                    Hangman.getLobbyController.addRoom()
+                    Platform.runLater {
+                        Hangman.getLobbyController.addRoom()
+                    }
                 }
                 Behaviors.same
 
@@ -226,7 +230,9 @@ object HangmanClient {
                     Hangman.getHowToPlayController.changeViewToLobby
                     for (room <- newLobby) {
                         lobby += room
-                        Hangman.getLobbyController.addRoom()
+                        Platform.runLater{
+                            Hangman.getLobbyController.addRoom()
+                        }
                     }
                     lobbyBehavior()
 
