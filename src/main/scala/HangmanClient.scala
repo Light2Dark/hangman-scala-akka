@@ -72,16 +72,13 @@ object HangmanClient {
                 var changedRoom: Room = lobby.diff(newLobby).head
                 if (lobby contains changedRoom) {
                     lobby -= changedRoom
-                    Platform.runLater {
-                        Hangman.getLobbyController.deleteRoom()
-                    }
                 }
                 else {
                     lobby += changedRoom
-                    Platform.runLater {
-                        Hangman.getLobbyController.addRoom()
-                    }
                 }
+                Platform.runLater {
+                        Hangman.getLobbyController.populateLobbyList()
+                    }
                 Behaviors.same
 
             case StartCreateRoom =>
@@ -91,6 +88,8 @@ object HangmanClient {
             case RoomDetails(room) =>
                 //this msg serves as an acknowledgement that the room has been successfully created. Update the UI to show the room 
                 //chg user object state to "waiting"
+                Hangman.getLobbyController.createNewGame
+                userOpt.get.status = "waiting"
                 waitingBehavior()
 
             case StartJoinRoom(list: Iterable[User]) =>
@@ -227,12 +226,12 @@ object HangmanClient {
                 
                 case Lobby(newLobby) => 
                     //show lobby UI, update lobby details and chg behavior to lobby behavior
-                    Hangman.getHowToPlayController.changeViewToLobby
                     for (room <- newLobby) {
                         lobby += room
-                        Platform.runLater{
-                            Hangman.getLobbyController.addRoom()
-                        }
+                    }
+                    Platform.runLater {
+                        Hangman.getHowToPlayController.changeViewToLobby
+                        Hangman.getLobbyController.populateLobbyList()
                     }
                     lobbyBehavior()
 

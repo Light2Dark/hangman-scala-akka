@@ -68,7 +68,7 @@
             </Button>
          </children>
       </GridPane>
-      <Button layoutX="616.0" layoutY="119.0" mnemonicParsing="false" onAction="#createNewGame" prefHeight="30.0" prefWidth="166.0" text="Create New Game">
+      <Button layoutX="616.0" layoutY="119.0" mnemonicParsing="false" onAction="#addRoom" prefHeight="30.0" prefWidth="166.0" text="Create New Game">
          <font>
             <Font name="Gill Sans MT" size="16.0" />
          </font>
