@@ -136,6 +136,7 @@ object HangmanClient {
         message match {
             case GameState(game) =>
                 //update the UI to reflect the latest game state
+                
                 Behaviors.same
 
             case Guess(alphabet) =>
