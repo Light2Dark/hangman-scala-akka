@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <children>
-      <Button layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#quitGame" text="Give Up">
+      <Button fx:id="giveUpButton" layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#quitGame" text="Give Up">
          <font>
             <Font name="Ink Free" size="17.0" />
          </font>

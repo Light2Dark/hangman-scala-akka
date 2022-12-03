@@ -1,6 +1,8 @@
+package 
+
 import akka.actor.typed.ActorRef
 import scala.util.Random
-import scala.collection.mutable.Set
+import scala.collection.mutable.{Set, ArrayBuffer}
 
 //the status of the user can either be lobby, waiting, or inGame
 case class User(name: String, ref: ActorRef[HangmanClient.Command], status: String) {
@@ -8,7 +10,11 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], status: Stri
     name
   }
 }
+
+
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) {
+  var remainingAlphabets: ArrayBuffer[Char] = ArrayBuffer('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')
+
   val alphabetsToGuess: Set[Char] = {
     val alphabetSet: Set[Char] = Set()
     for (alphabet <- wordToGuess) {
