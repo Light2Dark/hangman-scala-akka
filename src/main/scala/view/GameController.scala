@@ -64,20 +64,24 @@ class GameController(
     'Z' -> buttonZ
   )
 
+  // Reference to Client
+  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
+
   def handleAlphabetClicked(action: ActionEvent) = {
-    // Get text from clicked button 
+    // Get alphabet character of clicked button 
     var buttonClicked = action.getSource.asInstanceOf[javafx.scene.control.Button]
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     println(alphaClicked)
 
-    // Update game state
+    // Send Guess message to client - Update game state
+    
     
   }
 
-  // Disable buttons according to Game state
-  def setAlphabetButtons(game: Game): Unit = {
-
+  // Customize according to Game state
+  def setGameState(game: Game): Unit = {
+    // Disable guessed alphabet buttons
   }
 
   def quitGame = {

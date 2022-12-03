@@ -13,7 +13,7 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], status: Stri
 
 
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) {
-  var remainingAlphabets: ArrayBuffer[Char] = ArrayBuffer('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')
+  var guessedAlphabets: ArrayBuffer[Char] = ArrayBuffer()
 
   val alphabetsToGuess: Set[Char] = {
     val alphabetSet: Set[Char] = Set()

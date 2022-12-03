@@ -135,19 +135,21 @@ object HangmanClient {
     def inGameBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
             case GameState(game) =>
-                //update the UI to reflect the latest game state
-                
+                // Sent from server to clients in the same game
+                // update the UI to reflect the latest game state
                 Behaviors.same
 
             case Guess(alphabet) =>
-                //send a GuessAlphabet msg to the server
+                // Sent from controller to the client actor
+                // send a GuessAlphabet msg to the server
+                remoteOpt.ref ! HangmanServer.GuessAlphabet(userOpt, alphabet)
                 Behaviors.same
 
             case GameEnded(reason) =>
-                //update the UI to show if the players won/lost/the other player disconnected
-                //the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
-                //but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
-                //chg user object state to "lobby"
+                // update the UI to show if the players won/lost/the other player disconnected
+                // the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
+                // but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
+                // chg user object state to "lobby"
                 lobbyBehavior()
 
             case _ =>
