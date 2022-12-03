@@ -4,10 +4,11 @@ import scalafx.scene.Scene
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
+import akka.actor.typed.{ActorRef, PostStop, ActorSystem, Behavior}
 
 object Hangman extends JFXApp {
   // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-  // val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
+  val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
 
   // hangmanClient ! HangmanClient.start
 
