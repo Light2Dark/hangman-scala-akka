@@ -5,7 +5,7 @@ import scala.util.Random
 import scala.collection.mutable.{Set, ArrayBuffer}
 
 //the status of the user can either be lobby, waiting, or inGame
-case class User(name: String, ref: ActorRef[HangmanClient.Command], status: String) {
+case class User(name: String, ref: ActorRef[HangmanClient.Command], var status: String) {
   override def toString: String = {
     name
   }

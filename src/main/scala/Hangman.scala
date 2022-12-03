@@ -4,12 +4,13 @@ import scalafx.scene.Scene
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
+import akka.actor.typed.ActorSystem
 
 object Hangman extends JFXApp {
   // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-  // val greeterMain: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
+  val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
 
-  // greeterMain ! HangmanClient.start
+  // hangmanClient ! HangmanClient.start
 
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
@@ -35,9 +36,30 @@ object Hangman extends JFXApp {
     roots.setCenter(viewRoots)
   }
 
+  def getLobbyController = {
+    val resource = getClass.getResource(s"com.hangman.view/LobbyView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[LobbyController#Controller]()
+    control
+  }
+
+  def getHowToPlayController = {
+    val resource = getClass.getResource(s"com.hangman.view/SetNameView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[HowToPlayController#Controller]()
+    control
+  }
+
+  def getGameController = {
+    val resource = getClass.getResource(s"com.hangman.view/GameView.fxml")
+    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val control = fxmlLoader.getController[GameController#Controller]()
+    control
+  }
+
   val mainView = getClass.getResource("com.hangman.view/MainHangmanView.fxml")
   showView(mainView)
 
   // stage.onCloseRequest = handle( {
-  // greeterMain.terminate
+  // hangmanClient.terminate
 }
