@@ -29,7 +29,7 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
         contentText = "We have already reached the maximum number of rooms, please try again next time!"
       }.showAndWait()
     } else {
-      populateLobbyList()
+      Hangman.hangmanClient ! HangmanClient.StartCreateRoom
     }
   }
 
@@ -71,8 +71,7 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
     // add all existing rooms to the view from lobby
     var rowCount = 1 // skip 0th row for header
     for (room <- HangmanClient.lobby) {
-      // TODO: get name of room
-      val roomName: Text = new Text(room.toString)
+      val roomName: Text = new Text(room.player.name)
       roomName.font = Font("Hololens MDL2 Assets", size = 18.0)
 
       // TODO: get player count in room
