@@ -1,8 +1,6 @@
 import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
-import scalafx.scene.control.{Button}
-// import javafx.scene.control.{Button}
-
+import scalafx.scene.control.{Button, Label}
 
 @sfxml
 class GameController(
@@ -32,7 +30,13 @@ class GameController(
     private val buttonW: Button,
     private val buttonX: Button,
     private val buttonY: Button,
-    private val buttonZ: Button
+    private val buttonZ: Button,
+
+    private val player1Name: Label,
+    private val player2Name: Label,
+
+    // Game over page
+    private val gameOverMessage: Label
   ) {
 
   val alphabetButtons = Map(
@@ -64,7 +68,7 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  // Reference to Client
+  // Reference to current Client
   var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
 
   def handleAlphabetClicked(action: ActionEvent) = {
@@ -72,20 +76,29 @@ class GameController(
     var buttonClicked = action.getSource.asInstanceOf[javafx.scene.control.Button]
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
-    println(alphaClicked)
-
     // Send Guess message to client - Update game state
-    
-    
+    hangmanClientRef ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize according to Game state
   def setGameState(game: Game): Unit = {
     // Disable guessed alphabet buttons
+    for(a <- game.selectedAlphabets) {
+      if(!alphabetButtons(a).disabled.value){
+        alphabetButtons(a).disable = true
+      }
+    }
+
+    // 
   }
 
-  def quitGame = {
+  def quitGame(reason: String) = {
     Hangman.showView(getClass.getResource("com.hangman.view/GameOverView.fxml"))
+    if(reason == "Won") {
+      gameOverMessage.text = "You Won!"
+    } else {
+      gameOverMessage.text = "You Lost..."
+    }
   }
 
   def backToMenu = {
