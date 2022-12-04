@@ -118,7 +118,7 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
-                
+                remoteOpt.get ! HangmanServer.LeaveRoom(userOpt.get)
                 Behaviors.same
 
             case Lobby(roomList) =>
