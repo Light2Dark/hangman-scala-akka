@@ -4,7 +4,7 @@ import akka.actor.typed.receptionist.{Receptionist,ServiceKey}
 import akka.cluster.typed._
 import akka.{ actor => classic }
 import akka.actor.typed.scaladsl.adapter._
-import scalafx.collections.ObservableHashSet
+import scalafx.collections.{ObservableHashSet, ObservableSet}
 import scalafx.application.Platform
 import akka.cluster.ClusterEvent.ReachabilityEvent
 import akka.cluster.ClusterEvent.ReachableMember
@@ -21,7 +21,7 @@ object HangmanClient {
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
     case class StartLoadLobby(name: String) extends Command
     //lobby details sent from server to client actor
-    case class Lobby(lobby: List[Room]) extends Command
+    case class Lobby(lobby: ObservableSet[Room]) extends Command
     //sent from the controller to the client actor to start the process of creating a room
     case object StartCreateRoom extends Command
     //room details upon successful creation, sent from server to client actor
@@ -43,7 +43,7 @@ object HangmanClient {
     //private final case class MemberChange(event: MemberEvent) extends Command
     // private final case class ReachabilityChange(reachabilityEvent: ReachabilityEvent) extends Command
     //TODO: figure out how to get the actor context for this actor to be used in this
-    val lobby = new ObservableHashSet[Room]()
+    val lobby = ObservableSet[Room]()
 
 
 //   TODO: decide if we want to implement unreachable
@@ -67,28 +67,45 @@ object HangmanClient {
 
     def lobbyBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
-            case Lobby(roomList) =>
+            case Lobby(newLobby) =>
                 //update the list of rooms in the lobby
+                var changedRoom: Room = lobby.diff(newLobby).head
+                if (lobby contains changedRoom) {
+                    lobby -= changedRoom
+                }
+                else {
+                    lobby += changedRoom
+                }
+                Platform.runLater {
+                        Hangman.getLobbyController.populateLobbyList()
+                    }
                 Behaviors.same
 
             case StartCreateRoom =>
                 //send a create room msg to the server
+                remoteOpt.get ! HangmanServer.CreateRoom(userOpt.get)
                 Behaviors.same
 
             case RoomDetails(room) =>
                 //this msg serves as an acknowledgement that the room has been successfully created. Update the UI to show the room 
                 //chg user object state to "waiting"
+                Hangman.getLobbyController.createNewGame
+                userOpt.get.status = "waiting"
                 waitingBehavior()
 
-            case StartJoinRoom(list: Iterable[User]) =>
+            case StartJoinRoom(room: Room) =>
                 //send a join room msg to the server
+                remoteOpt.get ! HangmanServer.JoinRoom(userOpt.get, room)
                 Behaviors.same
 
             case GameState(game) =>
                 //this msg serves as an acknowledgement that the user has successfully joined the room
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
+                Hangman.getLobbyController.launchGameSession()
+                userOpt.get.status = "inGame"
                 inGameBehavior()
+
             case _=>
                 Behaviors.unhandled
         }
@@ -105,19 +122,23 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
+                
                 Behaviors.same
 
             case Lobby(roomList) =>
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
+                Hangman.getLobbyController
                 lobbyBehavior()
 
             case GameState(game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
+                Hangman.getGameController
                 inGameBehavior()
+                
             case _=>
                 Behaviors.unhandled
         }
@@ -133,19 +154,26 @@ object HangmanClient {
     def inGameBehavior(): Behavior[HangmanClient.Command] = Behaviors.receive[HangmanClient.Command] { (context, message) => 
         message match {
             case GameState(game) =>
-                //update the UI to reflect the latest game state
+                // Sent from server to clients in the same game
+                // update the UI to reflect the latest game state
+                Hangman.getGameController.setGameState(game)
                 Behaviors.same
 
             case Guess(alphabet) =>
-                //send a GuessAlphabet msg to the server
+                // Sent from controller to the client actor
+                // send a GuessAlphabet msg to the server
+                remoteOpt.ref ! HangmanServer.GuessAlphabet(userOpt, alphabet)
                 Behaviors.same
 
             case GameEnded(reason) =>
-                //update the UI to show if the players won/lost/the other player disconnected
-                //the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
-                //but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
-                //chg user object state to "lobby"
+                // Sent from server to clients w/ status won/loss
+                // update the UI to show if the players won/lost/the other player disconnected
+                // the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
+                // but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
+                // chg user object state to "lobby"
+                Hangman.getGameController.quitGame(reason)
                 lobbyBehavior()
+
             case _ =>
                 Behaviors.unhandled
         }
@@ -206,8 +234,15 @@ object HangmanClient {
                     remoteOpt.get ! HangmanServer.LoadLobby(userOpt.get)
                     Behaviors.same
                 
-                case Lobby(lobby) => 
+                case Lobby(newLobby) => 
                     //show lobby UI, update lobby details and chg behavior to lobby behavior
+                    for (room <- newLobby) {
+                        lobby += room
+                    }
+                    Platform.runLater {
+                        Hangman.getHowToPlayController.changeViewToLobby
+                        Hangman.getLobbyController.populateLobbyList()
+                    }
                     lobbyBehavior()
 
                 // case ReachabilityChange(reachabilityEvent) =>
