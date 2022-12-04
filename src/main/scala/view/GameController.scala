@@ -1,6 +1,7 @@
 import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
+import akka.actor.typed.ActorRef
 
 @sfxml
 class GameController(

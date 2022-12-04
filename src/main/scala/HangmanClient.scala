@@ -125,7 +125,7 @@ object HangmanClient {
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
-                Hangman.getLobbyController
+                Hangman.getHowToPlayController.changeViewToLobby
                 userOpt.get.status = "lobby"
                 lobbyBehavior()
 
