@@ -118,7 +118,7 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
-                
+                remoteOpt.get ! HangmanServer.LeaveRoom(userOpt.get)
                 Behaviors.same
 
             case Lobby(roomList) =>
@@ -126,13 +126,15 @@ object HangmanClient {
                 //show the lobby UI
                 //chg user object state to "lobby"
                 Hangman.getLobbyController
+                userOpt.get.status = "lobby"
                 lobbyBehavior()
 
             case GameState(game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
-                Hangman.getGameController
+                Hangman.getLobbyController.launchGameSession()
+                userOpt.get.status = "inGame"
                 inGameBehavior()
                 
             case _=>
