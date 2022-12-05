@@ -51,6 +51,7 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
   }
 
   def backToMenu = {
+    Hangman.hangmanClient ! HangmanClient.BackToMenu
     Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
   }
 

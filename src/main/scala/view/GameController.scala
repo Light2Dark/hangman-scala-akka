@@ -78,7 +78,7 @@ class GameController(
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     // Send Guess message to client - Update game state
-    hangmanClientRef ! HangmanClient.Guess(alphaClicked)    
+    hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize according to Game state

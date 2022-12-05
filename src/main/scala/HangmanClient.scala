@@ -22,6 +22,8 @@ object HangmanClient {
     case class StartLoadLobby(name: String) extends Command
     //lobby details sent from server to client actor
     case class Lobby(lobby: ObservableSet[Room]) extends Command
+    //back to menu from lobby, sent from controller to client actor
+    case object BackToMenu extends Command
     //sent from the controller to the client actor to start the process of creating a room
     case object StartCreateRoom extends Command
     //room details upon successful creation, sent from server to client actor
@@ -80,6 +82,9 @@ object HangmanClient {
                         Hangman.getLobbyController.populateLobbyList()
                     }
                 Behaviors.same
+            
+            case BackToMenu =>
+                defaultBehavior.get
 
             case StartCreateRoom =>
                 //send a create room msg to the server
@@ -164,7 +169,7 @@ object HangmanClient {
             case Guess(alphabet) =>
                 // Sent from controller to the client actor
                 // send a GuessAlphabet msg to the server
-                remoteOpt.ref ! HangmanServer.GuessAlphabet(userOpt, alphabet)
+                remoteOpt.get ! HangmanServer.GuessAlphabet(userOpt.get, alphabet)
                 Behaviors.same
 
             case GameEnded(reason) =>
