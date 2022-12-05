@@ -108,6 +108,8 @@ object HangmanClient {
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
                 Hangman.getLobbyController.launchGameSession()
+                //TODO: determine if the line below is needed
+                Hangman.getGameController.setGameState(game)
                 userOpt.get.status = "inGame"
                 inGameBehavior()
 
@@ -134,7 +136,10 @@ object HangmanClient {
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
-                Hangman.getHowToPlayController.changeViewToLobby
+                Hangman.getLobbyController.backToLobby
+                lobby.clear()
+                for (room <- roomList) lobby += room
+                Hangman.getLobbyController.populateLobbyList()
                 userOpt.get.status = "lobby"
                 lobbyBehavior()
 
@@ -143,6 +148,8 @@ object HangmanClient {
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
                 Hangman.getLobbyController.launchGameSession()
+                //TODO: determine if the line below is needed
+                Hangman.getGameController.setGameState(game)
                 userOpt.get.status = "inGame"
                 inGameBehavior()
                 

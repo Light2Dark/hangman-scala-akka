@@ -61,7 +61,7 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
 
   // when user clicks on cancel in the waiting room
   def cancelGame = {
-    Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
+    Hangman.hangmanClient ! HangmanClient.StartLeaveRoom
   }
 
   def populateLobbyList() = {
@@ -84,6 +84,8 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
       button.prefWidth = 70
       button.onAction = (event: ActionEvent) => {
         println("Joining!")
+        val roomToJoin = HangmanClient.lobby.filter(room => room.player.name == roomName).head
+        Hangman.hangmanClient ! HangmanClient.StartJoinRoom(roomToJoin)
       }
 
       // add to a row in gridpane
