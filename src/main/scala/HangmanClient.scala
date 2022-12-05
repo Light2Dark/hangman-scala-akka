@@ -83,6 +83,7 @@ object HangmanClient {
 
             case StartCreateRoom =>
                 //send a create room msg to the server
+                remoteOpt.get ! HangmanServer.CreateRoom(userOpt.get)
                 Behaviors.same
 
             case RoomDetails(room) =>
@@ -92,14 +93,17 @@ object HangmanClient {
                 userOpt.get.status = "waiting"
                 waitingBehavior()
 
-            case StartJoinRoom(list: Iterable[User]) =>
+            case StartJoinRoom(room: Room) =>
                 //send a join room msg to the server
+                remoteOpt.get ! HangmanServer.JoinRoom(userOpt.get, room)
                 Behaviors.same
 
             case GameState(game) =>
                 //this msg serves as an acknowledgement that the user has successfully joined the room
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
+                Hangman.getLobbyController.launchGameSession()
+                userOpt.get.status = "inGame"
                 inGameBehavior()
 
             case _=>
