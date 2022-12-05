@@ -9,11 +9,11 @@ class MainHangmanController() {
   val receivedText: ObservableBuffer[String] =  new ObservableBuffer[String]()
 
   def startGame() = {
-    Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
+    Hangman.showView(getClass.getResource("com.hangman.view/SetNameView.fxml"))
   }
 
   def howToPlay() = {
-    println("how to play")
+    Hangman.showView(getClass.getResource("com.hangman.view/SetNameView.fxml"))
   }
 
 }

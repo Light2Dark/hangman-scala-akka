@@ -4,10 +4,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOverController">
    <children>
       <Text layoutX="257.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
          <font>
@@ -29,15 +30,24 @@
             <Image url="@../images/player_two_figure-removebg.png" />
          </image>
       </ImageView>
-      <Text layoutX="350.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You Lost!">
+      <Text fx:id="gameOverMessage" layoutX="350.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You Lost!">
          <font>
             <Font name="Ink Free" size="38.0" />
          </font>
       </Text>
-      <Text layoutX="350.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Words Correct: ">
-         <font>
-            <Font name="HoloLens MDL2 Assets" size="17.0" />
-         </font>
-      </Text>
+      <HBox alignment="CENTER" layoutX="346.0" layoutY="307.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alphabets Correct: ">
+               <font>
+                  <Font name="HoloLens MDL2 Assets" size="17.0" />
+               </font>
+            </Text>
+            <Text fx:id="alphabetsCorrect" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+               <font>
+                  <Font name="HoloLens MDL2 Assets" size="17.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
