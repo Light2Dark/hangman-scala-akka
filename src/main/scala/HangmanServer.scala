@@ -46,18 +46,21 @@ object HangmanServer {
             case LoadLobby(user) =>
                 //add user to userOnMainMenu list and send them the lobby
                 usersOnMainMenu += user
+                println(s"users on main menu: $usersOnMainMenu")
                 user.ref ! HangmanClient.Lobby(lobby.toList)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
                 var newRoom = new Room(user)
                 user.ref ! HangmanClient.RoomDetails(newRoom)
-                usersOnMainMenu -= user
+                usersOnMainMenu.retain(x => x.name != user.name)
+                println(s"users on main menu: $usersOnMainMenu")
                 lobby += newRoom
                 Behaviors.same
             case LeaveRoom(user) =>
                 //add the user to the userOnMainMenu list, update all users on the deleted room
                 usersOnMainMenu += user
+                println(s"users on main menu: $usersOnMainMenu")
                 lobby -= lobby.find(room => room.player.name == user.name).get
                 Behaviors.same
             case JoinRoom(user, room) =>
