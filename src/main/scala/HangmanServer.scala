@@ -81,7 +81,7 @@ object HangmanServer {
                 //create a new game, remove the room from the lobby, send both users into the game by sending them GameState msgs.
                 var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
                 games += newGame
-                lobby -= lobby.find(lobbyRoom => lobbyRoom == room).get
+                lobby -= lobby.find(lobbyRoom => lobbyRoom.player.name == room.player.name).get
                 usersOnMainMenu.retain(x => x.name != user.name)
                 room.player.ref ! HangmanClient.GameState(newGame)
                 user.ref ! HangmanClient.GameState(newGame)
@@ -89,7 +89,7 @@ object HangmanServer {
             case GuessAlphabet(user, alphabet) =>
                 //update game state, inform other player of the update
                 //if game has ended, send a GameEnded msg to the players
-                var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
                 game.guess(alphabet)
                 game.players.foreach(player => player.ref ! HangmanClient.GameState(game))
                 if (game.isEnded) {
@@ -106,7 +106,7 @@ object HangmanServer {
                 //if the player is in the main menu, remove him from the usersOnMainMenu list
                 //if the player is in a room, delete the room and inform all users on the main menu about it
                 if (user.status == "inGame") {
-                  var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                  var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
                   game.players.foreach(player => player.ref ! HangmanClient.GameEnded("The other player disconnected"))
                   games -= game
                   game.players.foreach(player => usersOnMainMenu += player)
