@@ -20,6 +20,8 @@ object HangmanClient {
     case object Start extends Command
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
     case class StartLoadLobby(name: String) extends Command
+    //sent from server to client if the client enters a username that has been taken
+    case object UsernameTaken extends Command
     //lobby details sent from server to client actor
     case class Lobby(lobby: List[Room]) extends Command
     //back to menu from lobby, sent from controller to client actor
@@ -265,6 +267,12 @@ object HangmanClient {
                     remoteOpt.get ! HangmanServer.LoadLobby(userOpt.get)
                     Behaviors.same
                 
+                case UsernameTaken => 
+                    Platform.runLater {
+                        Hangman.getHowToPlayController.showUsernameTakenError
+                    }
+                    Behaviors.same
+
                 case Lobby(newLobby) => 
                     //show lobby UI, update lobby details and chg behavior to lobby behavior
                     println("Received Lobby from menu behavior: ")

@@ -68,7 +68,6 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
     // re-render whole grid pane so that the lobbyView is always consistent across clients
     // remove old lobbyList. removes rowIndex 1 onwards.
     lobbyList.getChildren().remove(3, lobbyList.getChildren().size() - 1)
-
     // add all existing rooms to the view from lobby
     var rowCount = 1 // skip 0th row for header
     for (room <- HangmanClient.lobby) {

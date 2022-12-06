@@ -24,6 +24,7 @@ object HangmanServer {
   //handles client closing the application
   case class Leave(user: User) extends Command
 
+  val users: Set[User] = Set()
   val usersOnMainMenu: Set[User] = Set()
   val lobby = new ObservableHashSet[Room]
   val games: Set[Game] = Set()
@@ -46,13 +47,21 @@ object HangmanServer {
       Behaviors.receiveMessage { message =>
         message match {
             case LoadLobby(user) =>
-                //add user to userOnMainMenu list and send them the lobby
-                usersOnMainMenu += user
-                println(s"users on main menu: $usersOnMainMenu")
-                user.ref ! HangmanClient.Lobby(lobby.toList)
+                //first check if the username has been taken
+                if (users.map(existingUser => existingUser.name) contains user.name) {
+                  user.ref ! HangmanClient.UsernameTaken
+                }
+                else {
+                  //add user to userOnMainMenu list and send them the lobby
+                  users += user
+                  usersOnMainMenu += user
+                  println(s"users on main menu: $usersOnMainMenu")
+                  user.ref ! HangmanClient.Lobby(lobby.toList)
+                }
                 Behaviors.same
             case ReturnToMenu(user) =>
                 usersOnMainMenu.retain(x => x.name != user.name)
+                users.retain(x => x.name != user.name)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
@@ -109,6 +118,7 @@ object HangmanServer {
                   var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player.name == user.name).get
                   lobby -= playerRoom
                 }
+                users.retain(x => x.name != user.name)
                 Behaviors.same
             }
       }
