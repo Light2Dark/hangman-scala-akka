@@ -68,7 +68,7 @@ object HangmanServer {
                 var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
                 games += newGame
                 lobby -= lobby.find(lobbyRoom => lobbyRoom == room).get
-                usersOnMainMenu -= user
+                usersOnMainMenu.retain(x => x.name != user.name)
                 room.player.ref ! HangmanClient.GameState(newGame)
                 user.ref ! HangmanClient.GameState(newGame)
                 Behaviors.same 

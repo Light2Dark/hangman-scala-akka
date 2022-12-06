@@ -71,22 +71,10 @@ object HangmanClient {
         message match {
             case Lobby(newLobby) =>
                 //update the list of rooms in the lobby
-                //TODO: the line below doesnt seem to work
                 println("Received Lobby: ")
                 println(newLobby)
-                println(lobby)
-                println(ObservableSet(newLobby))
-                var changedRoomSet: ObservableSet[Room] = lobby.diff(ObservableSet(newLobby))
-                if (changedRoomSet.size == 0) {
-                    changedRoomSet = ObservableSet(newLobby).diff(lobby)
-                }
-                val changedRoom: Room = changedRoomSet.head
-                if (lobby contains changedRoom) {
-                    lobby -= changedRoom
-                }
-                else {
-                    lobby += changedRoom
-                }
+                lobby.clear()
+                for (room <- newLobby) lobby += room
                 Platform.runLater {
                         Hangman.getLobbyController.populateLobbyList()
                     }
