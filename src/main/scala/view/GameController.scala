@@ -69,16 +69,13 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  // Reference to current Client
-  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
-
   def handleAlphabetClicked(action: ActionEvent) = {
     // Get alphabet character of clicked button 
     var buttonClicked = action.getSource.asInstanceOf[javafx.scene.control.Button]
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     // Send Guess message to client - Update game state
-    hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
+    Hangman.hangmanClient ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize according to Game state
@@ -88,6 +85,8 @@ class GameController(
       if(!alphabetButtons(a).disabled.value){
         alphabetButtons(a).disable = true
       }
+    // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
+    //objects bc their references will be different
     }
 
     // 

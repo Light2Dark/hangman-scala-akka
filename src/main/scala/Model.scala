@@ -36,6 +36,7 @@ class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int,
     else {
       livesLeft -= 1
     }
+    turn = players.filter(player => player.name != turn.name).head
     if (livesLeft == 0) status = "lost"
     if (alphabetsToGuess.size == 0) status = "won"
   }
