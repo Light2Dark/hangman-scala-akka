@@ -12,7 +12,7 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], var status: 
 }
 
 
-class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) {
+class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) extends Serializable {
   var selectedAlphabets: ArrayBuffer[Char] = ArrayBuffer()
 
   val alphabetsToGuess: Set[Char] = {
@@ -43,7 +43,7 @@ class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int,
   def isEnded: Boolean = status != "ongoing"
 }
 
-class Room(val player: User) {
+class Room(val player: User) extends Serializable {
     //logic to randomly generate word to be passed into the game
     def generateWord: String = {
       val wordList = List("food", "drink", "test", "lame", "walk")

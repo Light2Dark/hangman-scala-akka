@@ -8,7 +8,7 @@ import akka.actor.typed.ActorSystem
 
 object Hangman extends JFXApp {
   // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-  val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HangmanClient")
+  val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HelloSystem")
 
   // hangmanClient ! HangmanClient.start
 
@@ -38,21 +38,24 @@ object Hangman extends JFXApp {
 
   def getLobbyController = {
     val resource = getClass.getResource(s"com.hangman.view/LobbyView.fxml")
-    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
+    fxmlLoader.load()
     val control = fxmlLoader.getController[LobbyController#Controller]()
     control
   }
 
   def getHowToPlayController = {
     val resource = getClass.getResource(s"com.hangman.view/SetNameView.fxml")
-    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
+    fxmlLoader.load()
     val control = fxmlLoader.getController[HowToPlayController#Controller]()
     control
   }
 
   def getGameController = {
     val resource = getClass.getResource(s"com.hangman.view/GameView.fxml")
-    val fxmlLoader = new FXMLLoader(rootResource, NoDependencyResolver)
+    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
+    fxmlLoader.load()
     val control = fxmlLoader.getController[GameController#Controller]()
     control
   }

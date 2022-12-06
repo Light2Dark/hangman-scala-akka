@@ -21,7 +21,7 @@ object HangmanClient {
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
     case class StartLoadLobby(name: String) extends Command
     //lobby details sent from server to client actor
-    case class Lobby(lobby: ObservableSet[Room]) extends Command
+    case class Lobby(lobby: List[Room]) extends Command
     //back to menu from lobby, sent from controller to client actor
     case object BackToMenu extends Command
     //sent from the controller to the client actor to start the process of creating a room
@@ -71,7 +71,8 @@ object HangmanClient {
         message match {
             case Lobby(newLobby) =>
                 //update the list of rooms in the lobby
-                var changedRoom: Room = lobby.diff(newLobby).head
+                //TODO: the line below doesnt seem to work
+                var changedRoom: Room = lobby.diff(ObservableSet(newLobby)).head
                 if (lobby contains changedRoom) {
                     lobby -= changedRoom
                 }
@@ -94,7 +95,9 @@ object HangmanClient {
             case RoomDetails(room) =>
                 //this msg serves as an acknowledgement that the room has been successfully created. Update the UI to show the room 
                 //chg user object state to "waiting"
-                Hangman.getLobbyController.createNewGame
+                Platform.runLater {
+                    Hangman.getLobbyController.createNewGame
+                }
                 userOpt.get.status = "waiting"
                 waitingBehavior()
 
@@ -107,7 +110,9 @@ object HangmanClient {
                 //this msg serves as an acknowledgement that the user has successfully joined the room
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
-                Hangman.getLobbyController.launchGameSession()
+                Platform.runLater {
+                    Hangman.getLobbyController.launchGameSession()
+                }
                 //TODO: determine if the line below is needed
                 Hangman.getGameController.setGameState(game)
                 userOpt.get.status = "inGame"
@@ -136,10 +141,14 @@ object HangmanClient {
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
-                Hangman.getLobbyController.backToLobby
+                Platform.runLater {
+                    Hangman.getLobbyController.backToLobby
+                }
                 lobby.clear()
                 for (room <- roomList) lobby += room
-                Hangman.getLobbyController.populateLobbyList()
+                Platform.runLater {
+                    Hangman.getLobbyController.populateLobbyList()
+                }    
                 userOpt.get.status = "lobby"
                 lobbyBehavior()
 
@@ -147,7 +156,9 @@ object HangmanClient {
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
-                Hangman.getLobbyController.launchGameSession()
+                Platform.runLater {
+                    Hangman.getLobbyController.launchGameSession()
+                }
                 //TODO: determine if the line below is needed
                 Hangman.getGameController.setGameState(game)
                 userOpt.get.status = "inGame"

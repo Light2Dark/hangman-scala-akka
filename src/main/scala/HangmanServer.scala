@@ -28,7 +28,7 @@ object HangmanServer {
 
   lobby.onChange{(ns, _) =>
     for(user <- usersOnMainMenu){
-      user.ref ! HangmanClient.Lobby(ns)
+      user.ref ! HangmanClient.Lobby(ns.toList)
     }
   }
 
@@ -46,7 +46,7 @@ object HangmanServer {
             case LoadLobby(user) =>
                 //add user to userOnMainMenu list and send them the lobby
                 usersOnMainMenu += user
-                user.ref ! HangmanClient.Lobby(lobby)
+                user.ref ! HangmanClient.Lobby(lobby.toList)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
@@ -58,7 +58,7 @@ object HangmanServer {
             case LeaveRoom(user) =>
                 //add the user to the userOnMainMenu list, update all users on the deleted room
                 usersOnMainMenu += user
-                lobby -= lobby.find(room => room.player == user).get
+                lobby -= lobby.find(room => room.player.name == user.name).get
                 Behaviors.same
             case JoinRoom(user, room) =>
                 //create a new game, remove the room from the lobby, send both users into the game by sending them GameState msgs.
@@ -80,7 +80,7 @@ object HangmanServer {
                   games -= game
                   game.players.foreach(player => {
                     usersOnMainMenu += player
-                    player.ref ! HangmanClient.Lobby(lobby)
+                    player.ref ! HangmanClient.Lobby(lobby.toList)
                   })
                 }
                 Behaviors.same
