@@ -10,7 +10,7 @@ object Hangman extends JFXApp {
   // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
   val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HelloSystem")
 
-  // hangmanClient ! HangmanClient.start
+  hangmanClient ! HangmanClient.Start
 
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
@@ -63,6 +63,7 @@ object Hangman extends JFXApp {
   val mainView = getClass.getResource("com.hangman.view/MainHangmanView.fxml")
   showView(mainView)
 
-  // stage.onCloseRequest = handle( {
-  // hangmanClient.terminate
+  stage.onCloseRequest = handle({
+  hangmanClient.terminate
+  })
 }

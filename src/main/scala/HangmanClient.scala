@@ -77,11 +77,12 @@ object HangmanClient {
                 for (room <- newLobby) lobby += room
                 Platform.runLater {
                         Hangman.getLobbyController.populateLobbyList()
-                    }
+                }
                 Behaviors.same
             
             case BackToMenu =>
                 println("Received Back To Menu: ")
+                remoteOpt.get ! HangmanServer.ReturnToMenu(userOpt.get)
                 defaultBehavior.get
 
             case StartCreateRoom =>

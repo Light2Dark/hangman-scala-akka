@@ -11,6 +11,8 @@ object HangmanServer {
   sealed trait Command
   //handles client loading the lobby
   case class LoadLobby(user: User) extends Command
+  //handles client returning to menu
+  case class ReturnToMenu(user: User) extends Command
   //handles client creating a room
   case class CreateRoom(user: User) extends Command
   //handles client joining a room
@@ -48,6 +50,9 @@ object HangmanServer {
                 usersOnMainMenu += user
                 println(s"users on main menu: $usersOnMainMenu")
                 user.ref ! HangmanClient.Lobby(lobby.toList)
+                Behaviors.same
+            case ReturnToMenu(user) =>
+                usersOnMainMenu.retain(x => x.name != user.name)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
@@ -98,10 +103,10 @@ object HangmanServer {
                   game.players.foreach(player => usersOnMainMenu += player)
                 }
                 else if (user.status == "lobby") {
-                  usersOnMainMenu -= user
+                  usersOnMainMenu.retain(x => x.name != user.name)
                 }
                 else if (user.status == "waiting") {
-                  var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player == user).get
+                  var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player.name == user.name).get
                   lobby -= playerRoom
                 }
                 Behaviors.same
