@@ -3,7 +3,7 @@ import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
-import scala.collections.mutable.ListBuffer
+import scala.collections.mutable.{ListBuffer}
 
 @sfxml
 class GameController(
@@ -38,6 +38,9 @@ class GameController(
     // Player names
     private val player1Name: Label,
     private val player2Name: Label,
+
+    // Word results
+    private val wordGuess: Label,
 
     // Game over page
     private val gameOverMessage: Label,
@@ -93,6 +96,12 @@ class GameController(
 
   // Customize UI elements according to Game state
   def setGameState(game: Game): Unit = {
+    // Set text
+    var displayText = game.wordToGuess.toUpperCase().replace("", " ").trim()
+    for (a <- alphabetsToGuess) {
+      displayText = displayText.replace(a.toString(), "_")
+    }
+
     // Disable all alphabet buttons
     for(alpha, button <-alphabetButtons) {
       button.disable = true
@@ -108,10 +117,9 @@ class GameController(
     // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
     //objects bc their references will be different
 
-
     // Set hangman life state
-
-    // Set text
+    val fileNames = Array("rope7.png", "rope6.png", "rope5.png", "rope4.png", "rope3.png", "rope2.png", "rope1.png")
+    changeImage(fileNames(game.livesLeft))
   }
 
   def quitGame(reason: String) = {
