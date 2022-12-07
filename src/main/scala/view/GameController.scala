@@ -2,6 +2,7 @@ import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import akka.actor.typed.ActorRef
+import scalafx.scene.image.{Image, ImageView}
 
 @sfxml
 class GameController(
@@ -37,7 +38,9 @@ class GameController(
     private val player2Name: Label,
 
     // Game over page
-    private val gameOverMessage: Label
+    private val gameOverMessage: Label,
+
+    private val hangmanImage: ImageView
   ) {
 
   val alphabetButtons = Map(
@@ -103,5 +106,11 @@ class GameController(
 
   def backToMenu = {
     Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
+  }
+
+  // change image of the hangman after a guess
+  def changeImage(newImageLink: String) = {
+    hangmanImage.setImage(new Image(newImageLink))
+    // eg: hangmanImage.setImage(new Image("hangman-states-images/base2.png"))
   }
 }
