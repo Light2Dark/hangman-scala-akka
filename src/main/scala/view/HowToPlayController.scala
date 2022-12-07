@@ -1,8 +1,14 @@
 import scalafx.scene.control.TextField
+import scalafx.scene.text.Text
 import scalafxml.core.macros.sfxml
 
 @sfxml
-class HowToPlayController(private val playerName: TextField) {
+class HowToPlayController(private val playerName: TextField, val usernameTakenError: Text) {
+  def showUsernameTakenError = {
+    println(usernameTakenError.visible)
+    usernameTakenError.visible = true
+  }
+  
   def goToLobby = {
     // Can get the user's name from here
     val name: String = playerName.text.value

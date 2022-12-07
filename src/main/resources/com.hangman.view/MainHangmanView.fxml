@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainHangmanController">
    <children>
-      <Button layoutX="330.0" layoutY="436.0" mnemonicParsing="false" onAction="#howToPlay" prefHeight="53.0" prefWidth="190.0" text="How to Play">
+      <Button layoutX="330.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleExit" prefHeight="53.0" prefWidth="190.0" text="Quit">
          <font>
             <Font name="Ink Free" size="26.0" />
          </font>

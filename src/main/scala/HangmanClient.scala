@@ -20,6 +20,8 @@ object HangmanClient {
     case object Start extends Command
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
     case class StartLoadLobby(name: String) extends Command
+    //sent from server to client if the client enters a username that has been taken
+    case object UsernameTaken extends Command
     //lobby details sent from server to client actor
     case class Lobby(lobby: List[Room]) extends Command
     //back to menu from lobby, sent from controller to client actor
@@ -71,30 +73,31 @@ object HangmanClient {
         message match {
             case Lobby(newLobby) =>
                 //update the list of rooms in the lobby
-                //TODO: the line below doesnt seem to work
-                var changedRoom: Room = lobby.diff(ObservableSet(newLobby)).head
-                if (lobby contains changedRoom) {
-                    lobby -= changedRoom
-                }
-                else {
-                    lobby += changedRoom
-                }
+                println("Received Lobby: ")
+                println(newLobby)
+                lobby.clear()
+                for (room <- newLobby) lobby += room
                 Platform.runLater {
                         Hangman.getLobbyController.populateLobbyList()
-                    }
+                }
                 Behaviors.same
             
             case BackToMenu =>
+                println("Received Back To Menu: ")
+                remoteOpt.get ! HangmanServer.ReturnToMenu(userOpt.get)
                 defaultBehavior.get
 
             case StartCreateRoom =>
                 //send a create room msg to the server
+                println("Received StartCreateRoom: ")
                 remoteOpt.get ! HangmanServer.CreateRoom(userOpt.get)
                 Behaviors.same
 
             case RoomDetails(room) =>
                 //this msg serves as an acknowledgement that the room has been successfully created. Update the UI to show the room 
                 //chg user object state to "waiting"
+                println("Received RoomDetails: ")
+                println(room.player.name)
                 Platform.runLater {
                     Hangman.getLobbyController.createNewGame
                 }
@@ -134,6 +137,7 @@ object HangmanClient {
         message match {
             case StartLeaveRoom =>
                 //send a LeaveRoom msg to the server
+                println("Received StartLeaveRoom: ")
                 remoteOpt.get ! HangmanServer.LeaveRoom(userOpt.get)
                 Behaviors.same
 
@@ -141,6 +145,8 @@ object HangmanClient {
                 //this serves as an acknowledgement that the user has successfully left the room
                 //show the lobby UI
                 //chg user object state to "lobby"
+                println("Received Lobby in waitingBehavior: ")
+                println(roomList.map(room => room.player.name))
                 Platform.runLater {
                     Hangman.getLobbyController.backToLobby
                 }
@@ -255,12 +261,22 @@ object HangmanClient {
                     //a new user object will be created based on the name the user entered into the UI. The 'user' property in this actor
                     //points to the newly created user. It is therefore possible for the player to return to the main menu, key in another name,
                     //and create a new user object which this client actor will associate with.
+                    println("Received StartLoadLobby: ")
+                    println(name)
                     userOpt = Some(new User(name, context.self, "lobby"))
                     remoteOpt.get ! HangmanServer.LoadLobby(userOpt.get)
                     Behaviors.same
                 
+                case UsernameTaken => 
+                    Platform.runLater {
+                        Hangman.getHowToPlayController.showUsernameTakenError
+                    }
+                    Behaviors.same
+
                 case Lobby(newLobby) => 
                     //show lobby UI, update lobby details and chg behavior to lobby behavior
+                    println("Received Lobby from menu behavior: ")
+                    println(newLobby)
                     for (room <- newLobby) {
                         lobby += room
                     }

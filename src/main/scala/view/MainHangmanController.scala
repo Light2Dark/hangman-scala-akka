@@ -12,8 +12,7 @@ class MainHangmanController() {
     Hangman.showView(getClass.getResource("com.hangman.view/SetNameView.fxml"))
   }
 
-  def howToPlay() = {
-    Hangman.showView(getClass.getResource("com.hangman.view/SetNameView.fxml"))
+  def handleExit() = {
+    System.exit(0)
   }
-
 }

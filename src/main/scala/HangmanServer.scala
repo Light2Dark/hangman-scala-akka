@@ -11,6 +11,8 @@ object HangmanServer {
   sealed trait Command
   //handles client loading the lobby
   case class LoadLobby(user: User) extends Command
+  //handles client returning to menu
+  case class ReturnToMenu(user: User) extends Command
   //handles client creating a room
   case class CreateRoom(user: User) extends Command
   //handles client joining a room
@@ -22,6 +24,7 @@ object HangmanServer {
   //handles client closing the application
   case class Leave(user: User) extends Command
 
+  val users: Set[User] = Set()
   val usersOnMainMenu: Set[User] = Set()
   val lobby = new ObservableHashSet[Room]
   val games: Set[Game] = Set()
@@ -44,35 +47,49 @@ object HangmanServer {
       Behaviors.receiveMessage { message =>
         message match {
             case LoadLobby(user) =>
-                //add user to userOnMainMenu list and send them the lobby
-                usersOnMainMenu += user
-                user.ref ! HangmanClient.Lobby(lobby.toList)
+                //first check if the username has been taken
+                if (users.map(existingUser => existingUser.name) contains user.name) {
+                  user.ref ! HangmanClient.UsernameTaken
+                }
+                else {
+                  //add user to userOnMainMenu list and send them the lobby
+                  users += user
+                  usersOnMainMenu += user
+                  println(s"users on main menu: $usersOnMainMenu")
+                  user.ref ! HangmanClient.Lobby(lobby.toList)
+                }
+                Behaviors.same
+            case ReturnToMenu(user) =>
+                usersOnMainMenu.retain(x => x.name != user.name)
+                users.retain(x => x.name != user.name)
                 Behaviors.same
             case CreateRoom(user) =>
                 //create a new room, send the user to the room, remove the user from the userOnMainMenu list, update all users on the new room, send the user a RoomDetails msg
                 var newRoom = new Room(user)
                 user.ref ! HangmanClient.RoomDetails(newRoom)
-                usersOnMainMenu -= user
+                usersOnMainMenu.retain(x => x.name != user.name)
+                println(s"users on main menu: $usersOnMainMenu")
                 lobby += newRoom
                 Behaviors.same
             case LeaveRoom(user) =>
                 //add the user to the userOnMainMenu list, update all users on the deleted room
                 usersOnMainMenu += user
+                println(s"users on main menu: $usersOnMainMenu")
                 lobby -= lobby.find(room => room.player.name == user.name).get
                 Behaviors.same
             case JoinRoom(user, room) =>
                 //create a new game, remove the room from the lobby, send both users into the game by sending them GameState msgs.
                 var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
                 games += newGame
-                lobby -= lobby.find(lobbyRoom => lobbyRoom == room).get
-                usersOnMainMenu -= user
+                lobby -= lobby.find(lobbyRoom => lobbyRoom.player.name == room.player.name).get
+                usersOnMainMenu.retain(x => x.name != user.name)
                 room.player.ref ! HangmanClient.GameState(newGame)
                 user.ref ! HangmanClient.GameState(newGame)
                 Behaviors.same 
             case GuessAlphabet(user, alphabet) =>
                 //update game state, inform other player of the update
                 //if game has ended, send a GameEnded msg to the players
-                var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
                 game.guess(alphabet)
                 game.players.foreach(player => player.ref ! HangmanClient.GameState(game))
                 if (game.isEnded) {
@@ -89,18 +106,19 @@ object HangmanServer {
                 //if the player is in the main menu, remove him from the usersOnMainMenu list
                 //if the player is in a room, delete the room and inform all users on the main menu about it
                 if (user.status == "inGame") {
-                  var game = games.find(ongoingGame => ongoingGame.players.contains(user)).get
+                  var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
                   game.players.foreach(player => player.ref ! HangmanClient.GameEnded("The other player disconnected"))
                   games -= game
                   game.players.foreach(player => usersOnMainMenu += player)
                 }
                 else if (user.status == "lobby") {
-                  usersOnMainMenu -= user
+                  usersOnMainMenu.retain(x => x.name != user.name)
                 }
                 else if (user.status == "waiting") {
-                  var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player == user).get
+                  var playerRoom = lobby.find(lobbyRoom => lobbyRoom.player.name == user.name).get
                   lobby -= playerRoom
                 }
+                users.retain(x => x.name != user.name)
                 Behaviors.same
             }
       }

@@ -2,6 +2,7 @@ import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import akka.actor.typed.ActorRef
+import scalafx.scene.image.{Image, ImageView}
 
 @sfxml
 class GameController(
@@ -37,7 +38,9 @@ class GameController(
     private val player2Name: Label,
 
     // Game over page
-    private val gameOverMessage: Label
+    private val gameOverMessage: Label,
+
+    private val hangmanImage: ImageView
   ) {
 
   val alphabetButtons = Map(
@@ -69,7 +72,8 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  var activeNow: Boolean = true
+  // Reference to current Client
+  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
 
   def handleAlphabetClicked(action: ActionEvent) = {
     // Get alphabet character of clicked button 
@@ -77,7 +81,7 @@ class GameController(
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     // Send Guess message to client - Update game state
-    Hangman.hangmanClient ! HangmanClient.Guess(alphaClicked)    
+    hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize according to Game state
@@ -87,6 +91,8 @@ class GameController(
       if(!alphabetButtons(a).disabled.value){
         alphabetButtons(a).disable = true
       }
+    // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
+    //objects bc their references will be different
     }
 
     // Set hangman life state
@@ -103,5 +109,11 @@ class GameController(
 
   def backToMenu = {
     Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
+  }
+
+  // change image of the hangman after a guess
+  def changeImage(newImageLink: String) = {
+    hangmanImage.setImage(new Image(newImageLink))
+    // eg: hangmanImage.setImage(new Image("hangman-states-images/base2.png"))
   }
 }

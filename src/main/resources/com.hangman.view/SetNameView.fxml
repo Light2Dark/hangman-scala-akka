@@ -56,5 +56,6 @@
             <Font name="Ink Free" size="20.0" />
          </font>
       </Text>
+      <Text fx:id="usernameTakenError" fill="RED" layoutX="241.0" layoutY="560.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username has been taken, please enter another username." textAlignment="CENTER" visible="false" />
    </children>
 </AnchorPane>
