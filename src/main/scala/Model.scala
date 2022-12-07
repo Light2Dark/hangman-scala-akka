@@ -13,7 +13,9 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], var status: 
 
 
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) extends Serializable {
-  var selectedAlphabets: ArrayBuffer[Char] = ArrayBuffer()
+  var availableAlphabets: ArrayBuffer[Char] = ArrayBuffer(
+    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+  )
 
   val alphabetsToGuess: Set[Char] = {
     val alphabetSet: Set[Char] = Set()
@@ -31,7 +33,7 @@ class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int,
     //else if all alphabets have been guessed, change status to "won"
     if (alphabetsToGuess.apply(alphabet)) {
       alphabetsToGuess -= alphabet
-      selectedAlphabets += alphabet
+      availableAlphabets -= alphabet
     }
     else {
       livesLeft -= 1

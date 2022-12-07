@@ -3,6 +3,7 @@ import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
+import scala.collections.mutable.ListBuffer
 
 @sfxml
 class GameController(
@@ -34,12 +35,14 @@ class GameController(
     private val buttonY: Button,
     private val buttonZ: Button,
 
+    // Player names
     private val player1Name: Label,
     private val player2Name: Label,
 
     // Game over page
     private val gameOverMessage: Label,
 
+    // Hangman image
     private val hangmanImage: ImageView
   ) {
 
@@ -75,6 +78,10 @@ class GameController(
   // Reference to current Client
   var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
 
+  def getButtonChar(button: Button): Char = {
+    button.getId.charAt(button.getId.length()-1)
+  }
+
   def handleAlphabetClicked(action: ActionEvent) = {
     // Get alphabet character of clicked button 
     var buttonClicked = action.getSource.asInstanceOf[javafx.scene.control.Button]
@@ -84,18 +91,27 @@ class GameController(
     hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
   }
 
-  // Customize according to Game state
+  // Customize UI elements according to Game state
   def setGameState(game: Game): Unit = {
-    // Disable guessed alphabet buttons
-    for(a <- game.selectedAlphabets) {
-      if(!alphabetButtons(a).disabled.value){
-        alphabetButtons(a).disable = true
-      }
-    // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
-    //objects bc their references will be different
+    // Disable all alphabet buttons
+    for(alpha, button <-alphabetButtons) {
+      button.disable = true
     }
 
+    // Set button availability and current player based on turn
+    if (HangmanClient.userOpt.get.name == game.turn.name) {
+      for (a <- game.availableAlphabets) {
+        alphabetButtons(a).disable = false
+      }
+    } 
+
+    // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
+    //objects bc their references will be different
+
+
     // Set hangman life state
+
+    // Set text
   }
 
   def quitGame(reason: String) = {
@@ -111,7 +127,7 @@ class GameController(
     Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
   }
 
-  // change image of the hangman after a guess
+  // Change image of the hangman after a guess
   def changeImage(newImageLink: String) = {
     hangmanImage.setImage(new Image(newImageLink))
     // eg: hangmanImage.setImage(new Image("hangman-states-images/base2.png"))
