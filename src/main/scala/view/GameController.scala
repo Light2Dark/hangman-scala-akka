@@ -69,8 +69,7 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  // Reference to current Client
-  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
+  var activeNow: Boolean = true
 
   def handleAlphabetClicked(action: ActionEvent) = {
     // Get alphabet character of clicked button 
@@ -78,7 +77,7 @@ class GameController(
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     // Send Guess message to client - Update game state
-    hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
+    Hangman.hangmanClient ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize according to Game state
@@ -90,7 +89,7 @@ class GameController(
       }
     }
 
-    // 
+    // Set hangman life state
   }
 
   def quitGame(reason: String) = {
