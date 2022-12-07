@@ -25,7 +25,7 @@
             <Font name="Gill Sans MT" size="16.0" />
          </font>
       </Button>
-      <ImageView fx:id="testImage" fitHeight="209.0" fitWidth="79.0" layoutX="63.0" layoutY="321.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="209.0" fitWidth="79.0" layoutX="63.0" layoutY="321.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/player_one_figure-removebg.png" />
          </image>
