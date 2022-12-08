@@ -16,7 +16,7 @@
             <Font name="Ink Free" size="17.0" />
          </font>
       </Button>
-      <Text fx:id="player1Name" layoutX="69.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1">
+      <Text fx:id="player1Name" layoutX="12.0" layoutY="559.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1" textAlignment="CENTER" wrappingWidth="181.1669921875">
          <font>
             <Font name="HoloLens MDL2 Assets" size="18.0" />
          </font>
@@ -31,7 +31,7 @@
             <Image url="@../images/player_two_figure-removebg.png" />
          </image>
       </ImageView>
-      <Text fx:id="player2Name" layoutX="720.0" layoutY="551.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
+      <Text fx:id="player2Name" layoutX="661.0" layoutY="560.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2" textAlignment="CENTER" wrappingWidth="181.16698265075684">
          <font>
             <Font name="HoloLens MDL2 Assets" size="18.0" />
          </font>

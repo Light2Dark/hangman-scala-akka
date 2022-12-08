@@ -3,7 +3,7 @@ import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
-import scala.collections.mutable.{ListBuffer}
+import scala.collection.mutable.{ListBuffer}
 
 @sfxml
 class GameController(
@@ -39,7 +39,7 @@ class GameController(
     private val player1Name: Label,
     private val player2Name: Label,
 
-    // Word results
+    // Word to guess
     private val wordGuess: Label,
 
     // Game over page
@@ -91,19 +91,30 @@ class GameController(
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
 
     // Send Guess message to client - Update game state
-    hangmanClientRef.get ! HangmanClient.Guess(alphaClicked)    
+    Hangman.hangmanClient ! HangmanClient.Guess(alphaClicked)    
   }
 
   // Customize UI elements according to Game state
   def setGameState(game: Game): Unit = {
-    // Set text
+    // Set text to guess
     var displayText = game.wordToGuess.toUpperCase().replace("", " ").trim()
-    for (a <- alphabetsToGuess) {
+    for (a <- game.alphabetsToGuess) {
       displayText = displayText.replace(a.toString(), "_")
+    }
+    wordGuess.text = displayText
+
+    // Set player names
+
+    if (game.turn.name == game.players(1).name) [
+      player1Name.text = game.players(1).name + " (Guessing)"
+      player2Name.text = game.players(2).name
+    ] else {
+      player1Name.text = game.players(1).name
+      player2Name.text = game.players(2).name + " (Guessing)"
     }
 
     // Disable all alphabet buttons
-    for(alpha, button <-alphabetButtons) {
+    for((alpha, button) <-alphabetButtons) {
       button.disable = true
     }
 
