@@ -70,6 +70,7 @@ object HangmanServer {
                 usersOnMainMenu.retain(x => x.name != user.name)
                 println(s"users on main menu: $usersOnMainMenu")
                 lobby += newRoom
+                println(s"lobby list: $lobby")
                 Behaviors.same
             case LeaveRoom(user) =>
                 //add the user to the userOnMainMenu list, update all users on the deleted room
