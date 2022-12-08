@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <children>
-      <Button layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#quitGame" text="Give Up">
+      <Button layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#leaveGame" text="Give Up">
          <font>
             <Font name="Ink Free" size="17.0" />
          </font>
@@ -40,27 +40,27 @@
          <children>
             <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="19.0">
                <children>
-                  <Button mnemonicParsing="false" text="A">
+                  <Button fx:id="buttonA" mnemonicParsing="false" text="A">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="E">
+                  <Button fx:id="buttonE" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="E">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="I">
+                  <Button fx:id="buttonI" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="I">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="O">
+                  <Button fx:id="buttonO" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="O">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="U">
+                  <Button fx:id="buttonU" layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="U">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
@@ -69,47 +69,47 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="14.0">
                <children>
-                  <Button mnemonicParsing="false" text="B">
+                  <Button fx:id="buttonB" mnemonicParsing="false" text="B">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="C">
+                  <Button fx:id="buttonC" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="C">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="D">
+                  <Button fx:id="buttonD" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="D">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="F">
+                  <Button fx:id="buttonF" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="F">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="G">
+                  <Button fx:id="buttonG" layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="G">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="H">
+                  <Button fx:id="buttonH" layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="H">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="J">
+                  <Button fx:id="buttonJ" layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="J">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="396.0" layoutY="10.0" mnemonicParsing="false" text="K">
+                  <Button fx:id="buttonK" layoutX="396.0" layoutY="10.0" mnemonicParsing="false" text="K">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="L">
+                  <Button fx:id="buttonL" layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="L">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
@@ -118,42 +118,42 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="17.0">
                <children>
-                  <Button mnemonicParsing="false" text="M">
+                  <Button fx:id="buttonM" mnemonicParsing="false" text="M">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="N">
+                  <Button fx:id="buttonN" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="N">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="P">
+                  <Button fx:id="buttonP" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="P">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="Q">
+                  <Button fx:id="buttonQ" layoutX="116.0" layoutY="10.0" mnemonicParsing="false" text="Q">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="R">
+                  <Button fx:id="buttonR" layoutX="228.0" layoutY="10.0" mnemonicParsing="false" text="R">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="284.0" layoutY="10.0" mnemonicParsing="false" text="S">
+                  <Button fx:id="buttonS" layoutX="284.0" layoutY="10.0" mnemonicParsing="false" text="S">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="T">
+                  <Button fx:id="buttonT" layoutX="340.0" layoutY="10.0" mnemonicParsing="false" text="T">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="V">
+                  <Button fx:id="buttonV" layoutX="441.0" layoutY="10.0" mnemonicParsing="false" text="V">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
@@ -162,22 +162,22 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="37.0" prefWidth="200.0" spacing="13.0">
                <children>
-                  <Button mnemonicParsing="false" text="W">
+                  <Button fx:id="buttonW" mnemonicParsing="false" text="W">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="X">
+                  <Button fx:id="buttonX" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="X">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="Y">
+                  <Button fx:id="buttonY" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="Y">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="Z">
+                  <Button fx:id="buttonZ" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" text="Z">
                      <font>
                         <Font name="HoloLens MDL2 Assets" size="18.0" />
                      </font>

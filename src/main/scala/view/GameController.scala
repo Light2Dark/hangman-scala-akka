@@ -1,6 +1,7 @@
 import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
+import scalafx.scene.text.Text
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
 import scala.collection.mutable.{ListBuffer}
@@ -36,14 +37,14 @@ class GameController(
     private val buttonZ: Button,
 
     // Player names
-    private val player1Name: Label,
-    private val player2Name: Label,
+    private val player1Name: Text,
+    private val player2Name: Text,
 
     // Word to guess
-    private val wordGuess: Label,
+    private val wordGuess: Text,
 
     // Game over page
-    private val gameOverMessage: Label,
+    private val gameOverMessage: Text,
 
     // Hangman image
     private val hangmanImage: ImageView
@@ -105,12 +106,12 @@ class GameController(
 
     // Set player names
 
-    if (game.turn.name == game.players(1).name) {
-      player1Name.text = game.players(1).name + " (Guessing)"
-      player2Name.text = game.players(2).name
+    if (game.turn.name == game.players(0).name) {
+      player1Name.text = game.players(0).name + " (Guessing)"
+      player2Name.text = game.players(1).name
     } else {
-      player1Name.text = game.players(1).name
-      player2Name.text = game.players(2).name + " (Guessing)"
+      player1Name.text = game.players(0).name
+      player2Name.text = game.players(1).name + " (Guessing)"
     }
 
     // Disable all alphabet buttons
@@ -130,16 +131,21 @@ class GameController(
 
     // Set hangman life state
     val fileNames = Array("rope7.png", "rope6.png", "rope5.png", "rope4.png", "rope3.png", "rope2.png", "rope1.png")
-    changeImage(fileNames(game.livesLeft))
+    changeImage("hangman-states-images/" + fileNames(game.livesLeft))
   }
 
   def quitGame(reason: String) = {
     Hangman.showView(getClass.getResource("com.hangman.view/GameOverView.fxml"))
-    if(reason == "Won") {
+    if(reason == "won") {
       gameOverMessage.text = "You Won!"
     } else {
       gameOverMessage.text = "You Lost..."
     }
+  }
+
+  def leaveGame(action: ActionEvent) = {
+    Hangman.showView(getClass.getResource("com.hangman.view/GameOverView.fxml"))
+    gameOverMessage.text = "You Lost..."
   }
 
   def backToMenu = {

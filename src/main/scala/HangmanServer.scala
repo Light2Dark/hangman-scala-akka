@@ -81,7 +81,7 @@ object HangmanServer {
                 //create a new game, remove the room from the lobby, send both users into the game by sending them GameState msgs.
                 var newGame = new Game(List(room.player, user), room.generateWord, 6, room.player, "ongoing")
                 games += newGame
-                lobby -= lobby.find(lobbyRoom => lobbyRoom.player.name == room.player.name).get
+                // lobby -= lobby.find(lobbyRoom => lobbyRoom.player.name == room.player.name).get
                 usersOnMainMenu.retain(x => x.name != user.name)
                 room.player.ref ! HangmanClient.GameState(newGame)
                 user.ref ! HangmanClient.GameState(newGame)
