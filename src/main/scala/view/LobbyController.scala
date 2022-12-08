@@ -1,5 +1,4 @@
 import Hangman.stage
-import scalafx.collections.ObservableSet
 import scalafx.scene.control.{Alert, Button}
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.ImageView
