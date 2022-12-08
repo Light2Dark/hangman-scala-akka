@@ -53,7 +53,7 @@ class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int,
 class Room(val player: User) extends Serializable {
     //logic to randomly generate word to be passed into the game
     def generateWord: String = {
-      val wordList = List("food", "drink", "test", "lame", "walk")
+      val wordList = List("FOOD", "DRINK", "TEST", "LAME", "WALK")
       val random_var = new Random
       val randomWord = wordList(random_var.nextInt(wordList.length))
       randomWord

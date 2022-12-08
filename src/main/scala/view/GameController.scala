@@ -90,6 +90,7 @@ class GameController(
     // Get alphabet character of clicked button 
     var buttonClicked = action.getSource.asInstanceOf[javafx.scene.control.Button]
     var alphaClicked: Char = buttonClicked.getText.charAt(0)
+    println(s"alphabet clicked: $alphaClicked")
 
     // Send Guess message to client - Update game state
     Hangman.hangmanClient ! HangmanClient.Guess(alphaClicked)    
