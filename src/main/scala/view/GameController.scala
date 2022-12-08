@@ -149,8 +149,8 @@ class GameController(
     gameOverMessage.text = "You Lost..."
   }
 
-  def backToMenu = {
-    Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
+  def backToLobby = {
+    Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
   }
 
   // Change image of the hangman after a guess

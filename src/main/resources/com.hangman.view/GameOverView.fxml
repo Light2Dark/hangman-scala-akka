@@ -15,7 +15,7 @@
             <Font name="Ink Free" size="68.0" />
          </font>
       </Text>
-      <Button layoutX="340.0" layoutY="482.0" mnemonicParsing="false" onAction="#backToMenu" prefHeight="40.0" prefWidth="166.0" text=" Back to Menu">
+      <Button layoutX="340.0" layoutY="482.0" mnemonicParsing="false" onAction="#backToLobby" prefHeight="40.0" prefWidth="166.0" text=" Back to Lobby">
          <font>
             <Font name="Gill Sans MT" size="21.0" />
          </font>

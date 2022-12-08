@@ -203,7 +203,11 @@ object HangmanClient {
                 // the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
                 // but the lobby operations (e.g. updating the lobby with the latest rooms) will be performed nonetheless
                 // chg user object state to "lobby"
-                Hangman.getGameController.quitGame(reason)
+                println(s"game ended: $reason")
+                Platform.runLater{
+                    Hangman.getGameController.quitGame(reason)
+                }
+                userOpt.get.status = "lobby"
                 lobbyBehavior()
 
             case _ =>
