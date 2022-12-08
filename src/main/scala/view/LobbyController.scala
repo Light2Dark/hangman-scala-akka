@@ -82,7 +82,7 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
       button.prefWidth = 70
       button.onAction = (event: ActionEvent) => {
         println("Joining!")
-        val roomToJoin = HangmanClient.lobby.filter(room => room.player.name == roomName).head
+        val roomToJoin = HangmanClient.lobby.filter(room => room.player.name == roomName.text.value).head
         Hangman.hangmanClient ! HangmanClient.StartJoinRoom(roomToJoin)
       }
 

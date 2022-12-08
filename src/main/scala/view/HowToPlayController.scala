@@ -1,12 +1,18 @@
-import scalafx.scene.control.TextField
+import Hangman.stage
+import scalafx.scene.control.{TextField, Alert}
+import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.text.Text
 import scalafxml.core.macros.sfxml
 
 @sfxml
 class HowToPlayController(private val playerName: TextField, val usernameTakenError: Text) {
   def showUsernameTakenError = {
-    println(usernameTakenError.visible)
-    usernameTakenError.visible = true
+    new Alert(AlertType.Error) {
+        initOwner(stage)
+        title = "Error"
+        headerText = "Error: Username Taken."
+        contentText = "This username has already been taken, please enter another username!"
+      }.showAndWait()
   }
   
   def goToLobby = {

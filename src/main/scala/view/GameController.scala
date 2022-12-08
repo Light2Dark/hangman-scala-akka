@@ -105,10 +105,10 @@ class GameController(
 
     // Set player names
 
-    if (game.turn.name == game.players(1).name) [
+    if (game.turn.name == game.players(1).name) {
       player1Name.text = game.players(1).name + " (Guessing)"
       player2Name.text = game.players(2).name
-    ] else {
+    } else {
       player1Name.text = game.players(1).name
       player2Name.text = game.players(2).name + " (Guessing)"
     }
