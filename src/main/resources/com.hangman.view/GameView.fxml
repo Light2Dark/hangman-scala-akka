@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <children>
       <Button layoutX="680.0" layoutY="71.0" mnemonicParsing="false" onAction="#quitGame" text="Give Up">
          <font>
@@ -186,12 +186,12 @@
             </HBox>
          </children>
       </VBox>
-      <Text layoutX="353.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="_  _  _  _  _">
+      <Text fx:id="wordGuess" layoutX="287.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="_  _  _  _  _" textAlignment="CENTER" wrappingWidth="275.0224609375">
          <font>
             <Font name="HoloLens MDL2 Assets" size="25.0" />
          </font>
       </Text>
-      <VBox alignment="BOTTOM_LEFT" layoutX="321.0" layoutY="44.0" prefHeight="200.0" prefWidth="100.0">
+      <VBox alignment="BOTTOM_LEFT" layoutX="315.0" layoutY="43.0" prefHeight="200.0" prefWidth="100.0">
          <children>
             <ImageView fx:id="hangmanImage" fitHeight="220.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                <image>
