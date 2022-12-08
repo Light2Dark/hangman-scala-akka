@@ -13,6 +13,10 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], var status: 
 
 
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) extends Serializable {
+  override def toString: String = {
+    s"word: $wordToGuess, lives: $livesLeft, turn: $turn, alphabets to guess: $alphabetsToGuess"
+  }
+
   var availableAlphabets: ArrayBuffer[Char] = ArrayBuffer(
     'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
   )

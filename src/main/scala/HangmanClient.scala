@@ -188,6 +188,7 @@ object HangmanClient {
                 // Sent from server to clients in the same game
                 // update the UI to reflect the latest game state
                 Hangman.getGameController.setGameState(game)
+                println(game)
                 Behaviors.same
 
             case Guess(alphabet) =>
