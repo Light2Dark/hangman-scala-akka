@@ -5,10 +5,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LobbyController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LobbyController">
    <children>
       <Text layoutX="341.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lobby">
          <font>
@@ -20,7 +21,7 @@
             <Font name="Ink Free" size="15.0" />
          </font>
       </Button>
-      <GridPane fx:id="lobbyList" gridLinesVisible="true" layoutX="73.0" layoutY="165.0" prefHeight="390.0" prefWidth="710.0" style="-fx-background-color: white;">
+      <GridPane fx:id="lobbyList" layoutX="73.0" layoutY="165.0" prefHeight="390.0" prefWidth="710.0" style="-fx-background-color: white;">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="525.3999633789062" minWidth="10.0" prefWidth="462.6" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="525.3999633789062" minWidth="10.0" prefWidth="150.40000000000003" />
@@ -73,5 +74,17 @@
             <Font name="Gill Sans MT" size="16.0" />
          </font>
       </Button>
+      <Line endX="609.3999633789062" endY="0.9999847412109375" layoutX="174.0" layoutY="164.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="609.3999633789062" endY="0.9999847412109375" layoutX="173.0" layoutY="559.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="-112.41419982910156" endY="383.5858154296875" layoutX="184.0" layoutY="174.0" startX="-110.99998474121094" startY="-9.000015258789062" strokeWidth="2.0" />
+      <Line endX="589.8141479492188" endY="377.4141845703125" layoutX="194.0" layoutY="184.0" startX="589.3999633789062" startY="-19.000015258789062" strokeWidth="2.0" />
+      <Line endX="332.39996337890625" endY="373.5858154296875" layoutX="194.0" layoutY="184.0" startX="332.39996337890625" startY="-19.000015258789062" />
+      <Line endX="463.20001220703125" endY="367.4141845703125" layoutX="204.0" layoutY="194.0" startX="463.20001220703125" startY="-27.585800170898438" />
+      <Line endX="597.9857788085938" endY="47.59999084472656" layoutX="184.0" layoutY="174.0" startX="-110.99998474121094" startY="47.59999084472656" />
+      <Line endX="587.9857788085938" endY="92.80001831054688" layoutX="194.0" layoutY="185.0" startX="-120.99998474121094" startY="92.80001831054688" />
+      <Line endX="581.2283325195312" endY="138.60000610351562" layoutX="204.0" layoutY="196.0" startX="-130.99998474121094" startY="138.60000610351562" />
+      <Line endX="567.9857788085938" endY="185.20001220703125" layoutX="214.0" layoutY="205.0" startX="-140.99998474121094" startY="185.20001220703125" />
+      <Line endX="559.3999633789062" endY="232.20001220703125" layoutX="224.0" layoutY="215.0" startX="-150.99998474121094" startY="232.20001220703125" />
+      <Line endX="547.9857788085938" endY="278.20001220703125" layoutX="234.0" layoutY="225.0" startX="-160.99998474121094" startY="278.20001220703125" />
    </children>
 </AnchorPane>
