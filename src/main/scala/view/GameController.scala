@@ -5,7 +5,6 @@ import scalafx.scene.text.Text
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
 import scala.collection.mutable.{ListBuffer}
-import scalafx.application.Platform
 
 @sfxml
 class GameController(
@@ -80,8 +79,8 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  // Reference to current game
-  private var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
+  // Reference to current Client
+  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
 
   def getButtonChar(button: Button): Char = {
     button.getId.charAt(button.getId.length()-1)
@@ -99,24 +98,14 @@ class GameController(
 
   // Customize UI elements according to Game state
   def setGameState(game: Game): Unit = {
-    println("Game state set.")
-    println("Game info: " + game)
-
-    Platform.runLater (new Runnable {override def run(): Unit = {
-    // Set hangman image based on number of lives left
-    val fileNames = Array("rope7.png", "rope6.png", "rope5.png", "rope4.png", "rope3.png", "rope2.png", "rope1.png")
-    changeImage("hangman-states-images/" + fileNames(game.livesLeft))
-
     // Set text to guess
     var displayText = game.wordToGuess.toUpperCase().replace("", " ").trim()
     for (a <- game.alphabetsToGuess) {
       displayText = displayText.replace(a.toString(), "_")
     }
     wordGuess.text = displayText
-    println("Display text: " + displayText)
 
     // Set player names
-    println("Current turn: " + game.turn.name)
 
     if (game.turn.name == game.players(0).name) {
       player1Name.text = game.players(0).name + " (Guessing)"
@@ -136,10 +125,14 @@ class GameController(
       for (a <- game.availableAlphabets) {
         alphabetButtons(a).disable = false
       }
-    } }})
+    } 
 
     // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
     //objects bc their references will be different
+
+    // Set hangman life state
+    val fileNames = Array("rope7.png", "rope6.png", "rope5.png", "rope4.png", "rope3.png", "rope2.png", "rope1.png")
+    changeImage("hangman-states-images/" + fileNames(game.livesLeft))
   }
 
   def quitGame(reason: String) = {
@@ -164,14 +157,5 @@ class GameController(
   def changeImage(newImageLink: String) = {
     hangmanImage.setImage(new Image(newImageLink))
     // eg: hangmanImage.setImage(new Image("hangman-states-images/base2.png"))
-  }
-
-  def changeButton(action: ActionEvent) = {
-    changeImage("hangman-states-images/rope7.png")
-
-    // Disable all alphabet buttons
-    for((alpha, button) <-alphabetButtons) {
-      button.disable = true
-    }
   }
 }
