@@ -12,8 +12,6 @@ import scalafx.event.ActionEvent
 @sfxml
 class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, val playerOneText: Text) {
 
-  // if we already have the user name, we can call playerOneText's value to set the name
-
   def addRoom() {
     //add a room to the lobby view
     val maxRooms: Int = lobbyList.getRowConstraints.size() - 1 // not considering the header
@@ -42,20 +40,20 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
   }
 
   def launchGameSession() = {
-    Hangman.showView(getClass.getResource("com.hangman.view/GameView.fxml"))
+    Hangman.showGame
   }
 
   def backToLobby = {
-    Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
+    Hangman.showLobby
   }
 
   def backToMenu = {
     Hangman.hangmanClient ! HangmanClient.BackToMenu
-    Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
+    Hangman.showMainHangman
   }
 
   def createNewGame = {
-    Hangman.showView(getClass.getResource("com.hangman.view/CreateNewGameView.fxml"))
+    Hangman.showCreateNewGame
   }
 
   // when user clicks on cancel in the waiting room
@@ -73,7 +71,6 @@ class LobbyController(val lobbyList: GridPane, private val spinner: ImageView, v
       val roomName: Text = new Text(room.player.name)
       roomName.font = Font("Hololens MDL2 Assets", size = 18.0)
 
-      // TODO: get player count in room
       val players: Text = new Text("1/2")
       players.font = Font("Hololens MDL2 Assets", size = 18.0)
 

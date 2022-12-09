@@ -1,5 +1,3 @@
-// package 
-
 import akka.actor.typed.ActorRef
 import scala.util.Random
 import scala.collection.mutable.{Set, ArrayBuffer}
@@ -10,7 +8,6 @@ case class User(name: String, ref: ActorRef[HangmanClient.Command], var status: 
     name
   }
 }
-
 
 class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int, var turn: User, var status: String) extends Serializable {
   override def toString: String = {
@@ -37,17 +34,20 @@ class Game(val players: List[User], val wordToGuess: String, var livesLeft: Int,
     //else if all alphabets have been guessed, change status to "won"
     if (alphabetsToGuess.apply(alphabet)) {
       alphabetsToGuess -= alphabet
-      availableAlphabets -= alphabet
     }
     else {
       livesLeft -= 1
     }
+    availableAlphabets -= alphabet
     turn = players.filter(player => player.name != turn.name).head
     if (livesLeft == 0) status = "lost"
     if (alphabetsToGuess.size == 0) status = "won"
   }
 
   def isEnded: Boolean = status != "ongoing"
+
+  //total number of guesses - number of incorrect guesses
+  def calculateNumberOfCorrectGuesses: Int = (26 - availableAlphabets.length) - (6 - livesLeft)
 }
 
 class Room(val player: User) extends Serializable {

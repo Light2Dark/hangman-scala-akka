@@ -7,7 +7,6 @@ import scalafx.collections.ObservableHashSet
 import scala.collection.mutable.Set
 
 object HangmanServer {
-  //TODO: fix properties of messages
   sealed trait Command
   //handles client loading the lobby
   case class LoadLobby(user: User) extends Command
@@ -39,9 +38,6 @@ object HangmanServer {
 
   def apply(): Behavior[HangmanServer.Command] =
     Behaviors.setup { context =>
-      // val upnpRef = context.spawn(Upnp(), Upnp.name)
-      // upnpRef ! AddPortMapping(20000)
-
       context.system.receptionist ! Receptionist.Register(ServerKey, context.self)
       
       Behaviors.receiveMessage { message =>
@@ -94,7 +90,7 @@ object HangmanServer {
                 game.guess(alphabet)
                 game.players.foreach(player => player.ref ! HangmanClient.GameState(game))
                 if (game.isEnded) {
-                  game.players.foreach(player => player.ref ! HangmanClient.GameEnded(game.status))
+                  game.players.foreach(player => player.ref ! HangmanClient.GameEnded(game.status, game.calculateNumberOfCorrectGuesses))
                   games -= game
                   game.players.foreach(player => {
                     usersOnMainMenu += player
@@ -109,7 +105,7 @@ object HangmanServer {
                 if (user.status == "inGame") {
                   var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
                   var remainingPlayer = game.players.filter(player => player.name != user.name).head
-                  remainingPlayer.ref ! HangmanClient.GameEnded("The other player disconnected")
+                  remainingPlayer.ref ! HangmanClient.GameEnded("The other player disconnected", game.calculateNumberOfCorrectGuesses)
                   games -= game
                   usersOnMainMenu += remainingPlayer
                 }

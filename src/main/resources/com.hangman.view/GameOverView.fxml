@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOverController">
    <children>
       <Text layoutX="257.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
          <font>
@@ -30,7 +30,7 @@
             <Image url="@../images/player_two_figure-removebg.png" />
          </image>
       </ImageView>
-      <Text fx:id="gameOverMessage" layoutX="350.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You Lost!">
+      <Text fx:id="gameOverMessage" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You Lost!" textAlignment="CENTER" wrappingWidth="850.0000069141388">
          <font>
             <Font name="Ink Free" size="38.0" />
          </font>

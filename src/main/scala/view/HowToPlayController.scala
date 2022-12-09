@@ -22,9 +22,7 @@ class HowToPlayController(private val playerName: TextField, val usernameTakenEr
   }
 
   //the lobby is not shown until the server replies the client actor with a Lobby msg
-  def changeViewToLobby = Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
+  def changeViewToLobby = Hangman.showLobby
 
-  def backToMenu = {
-    Hangman.showView(getClass.getResource("com.hangman.view/MainHangmanView.fxml"))
-  }
+  def backToMenu = Hangman.showMainHangman
 }

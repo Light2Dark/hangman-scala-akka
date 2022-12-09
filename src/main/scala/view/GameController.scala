@@ -2,6 +2,7 @@ import scalafxml.core.macros.sfxml
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{Button, Label}
 import scalafx.scene.text.Text
+import scalafx.application.Platform
 import akka.actor.typed.ActorRef
 import scalafx.scene.image.{Image, ImageView}
 import scala.collection.mutable.{ListBuffer}
@@ -79,9 +80,6 @@ class GameController(
     'Z' -> buttonZ
   )
 
-  // Reference to current Client
-  var hangmanClientRef: Option[ActorRef[HangmanClient.Command]] = None
-
   def getButtonChar(button: Button): Char = {
     button.getId.charAt(button.getId.length()-1)
   }
@@ -106,7 +104,6 @@ class GameController(
     wordGuess.text = displayText
 
     // Set player names
-
     if (game.turn.name == game.players(0).name) {
       player1Name.text = game.players(0).name + " (Guessing)"
       player2Name.text = game.players(1).name
@@ -127,30 +124,15 @@ class GameController(
       }
     } 
 
-    // to determine if it is the player's turn, say HangmanClient.userOpt.get.name == game.turn.name. We cannot directly compare the two
-    //objects bc their references will be different
-
     // Set hangman life state
     val fileNames = Array("rope7.png", "rope6.png", "rope5.png", "rope4.png", "rope3.png", "rope2.png", "rope1.png")
     changeImage("hangman-states-images/" + fileNames(game.livesLeft))
   }
 
-  def quitGame(reason: String) = {
-    Hangman.showView(getClass.getResource("com.hangman.view/GameOverView.fxml"))
-    if(reason == "won") {
-      gameOverMessage.text = "You Won!"
-    } else {
-      gameOverMessage.text = "You Lost..."
-    }
-  }
-
-  def leaveGame(action: ActionEvent) = {
-    Hangman.showView(getClass.getResource("com.hangman.view/GameOverView.fxml"))
-    gameOverMessage.text = "You Lost..."
-  }
-
-  def backToLobby = {
-    Hangman.showView(getClass.getResource("com.hangman.view/LobbyView.fxml"))
+  def quitGame(reason: String, numberOfCorrectGuesses: Int) = {
+    Hangman.showGameOver
+    Hangman.getGameOverController.showQuitGameReason(reason)
+    Hangman.getGameOverController.showNumberOfCorrectGuesses(numberOfCorrectGuesses)
   }
 
   // Change image of the hangman after a guess

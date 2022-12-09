@@ -7,61 +7,77 @@ import javafx.{scene => jfxs}
 import akka.actor.typed.ActorSystem
 
 object Hangman extends JFXApp {
-  // implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
   val hangmanClient: ActorSystem[HangmanClient.Command] = ActorSystem(HangmanClient(), "HelloSystem")
-
   hangmanClient ! HangmanClient.Start
 
   val rootResource = getClass.getResource("com.hangman.view/RootLayout.fxml")
   val loader = new FXMLLoader(rootResource, NoDependencyResolver)
   loader.load()
-  val control = loader.getController[MainHangmanController#Controller]()
+  var control = loader.getController[MainHangmanController#Controller]()
   val roots = loader.getRoot[jfxs.layout.BorderPane]
 
   stage = new PrimaryStage {
     title = "Hangman"
-    // icons += new Image(getClass.getResourceAsStream("resources/images/logo.png"))
     resizable = false
     scene = new Scene {
       root = roots
-      // stylesheets = List(getClass.getResource("view/styles.css").toString())
     }
   }
 
-  def showView(resource: java.net.URL) = {
-    val resourceLoader = new FXMLLoader(resource, NoDependencyResolver)
-    resourceLoader.load()
+  //controllers for all pages, these variables will be reassigned with the actual controllers once the views are loaded
+  var getLobbyController: LobbyController#Controller = null
+  var getHowToPlayController: HowToPlayController#Controller = null
+  var getGameController: GameController#Controller = null
+  var getGameOverController: GameOverController#Controller = null
 
+  def showMainHangman = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/MainHangmanView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
     val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
     roots.setCenter(viewRoots)
   }
 
-  def getLobbyController = {
-    val resource = getClass.getResource(s"com.hangman.view/LobbyView.fxml")
-    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
-    fxmlLoader.load()
-    val control = fxmlLoader.getController[LobbyController#Controller]()
-    control
+  def showSetNameView = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/SetNameView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
+    getHowToPlayController = resourceLoader.getController[HowToPlayController#Controller]()
+    val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
+    roots.setCenter(viewRoots)
   }
 
-  def getHowToPlayController = {
-    val resource = getClass.getResource(s"com.hangman.view/SetNameView.fxml")
-    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
-    fxmlLoader.load()
-    val control = fxmlLoader.getController[HowToPlayController#Controller]()
-    control
+  def showLobby = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/LobbyView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
+    getLobbyController = resourceLoader.getController[LobbyController#Controller]()
+    val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
+    roots.setCenter(viewRoots)
   }
 
-  def getGameController = {
-    val resource = getClass.getResource(s"com.hangman.view/GameView.fxml")
-    val fxmlLoader = new FXMLLoader(resource, NoDependencyResolver)
-    fxmlLoader.load()
-    val control = fxmlLoader.getController[GameController#Controller]()
-    control
+  def showCreateNewGame = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/CreateNewGameView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
+    getLobbyController = resourceLoader.getController[LobbyController#Controller]()
+    val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
+    roots.setCenter(viewRoots)
   }
 
-  val mainView = getClass.getResource("com.hangman.view/MainHangmanView.fxml")
-  showView(mainView)
+  def showGame = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/GameView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
+    getGameController = resourceLoader.getController[GameController#Controller]()
+    val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
+    roots.setCenter(viewRoots)
+  }
+
+  def showGameOver = {
+    val resourceLoader = new FXMLLoader(getClass.getResource("com.hangman.view/GameOverView.fxml"), NoDependencyResolver)
+    resourceLoader.load()
+    getGameOverController = resourceLoader.getController[GameOverController#Controller]()
+    val viewRoots = resourceLoader.getRoot[jfxs.layout.AnchorPane]
+    roots.setCenter(viewRoots)
+  }
+
+  showMainHangman
 
   stage.onCloseRequest = handle({
   hangmanClient.terminate

@@ -49,10 +49,5 @@
             <Image url="@../images/spinning_loader.gif" />
          </image>
       </ImageView>
-      <Button layoutX="601.0" layoutY="547.0" mnemonicParsing="false" onAction="#launchGameSession" prefHeight="31.0" prefWidth="211.0" text="Test Button ( goes to game view)">
-         <font>
-            <Font name="Gill Sans MT" size="14.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>

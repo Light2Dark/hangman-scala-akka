@@ -14,8 +14,6 @@ import akka.actor.Address
 
 object HangmanClient {
     sealed trait Command
-    //internal protocol
-    // TODO: modify properties of the msgs
     //start the application and initialize the client actor
     case object Start extends Command
     //sent from the controller to client, the client will then send a LoadLobby msg to the server to get lobby details
@@ -40,31 +38,11 @@ object HangmanClient {
     //sent from controller to client actor to make a guess
     case class Guess(alphabet: Char) extends Command
     //sent from server to client after the game ends. 
-    case class GameEnded(reason: String) extends Command
-
+    case class GameEnded(reason: String, numberOfCorrectGuesses: Int) extends Command
     final case object FindTheServer extends Command
     private case class ListingResponse(listing: Receptionist.Listing) extends Command
-    //private final case class MemberChange(event: MemberEvent) extends Command
-    // private final case class ReachabilityChange(reachabilityEvent: ReachabilityEvent) extends Command
-    //TODO: figure out how to get the actor context for this actor to be used in this
+
     val lobby = ObservableSet[Room]()
-
-
-//   TODO: decide if we want to implement unreachable
-//    val unreachables = new ObservableHashSet[Address]()
-//     unreachables.onChange{(ns, _) =>
-//         Platform.runLater {
-//             Client.control.updateList(members.toList.filter(y => ! unreachables.exists (x => x == y.ref.path.address)))
-//         }
-//     }
-
-//  TODO: change this function to update the lobby list
-//  members.onChange{(ns, _) =>
-//     Platform.runLater {
-//         Client.control.updateList(ns.toList.filter(y => ! unreachables.exists (x => x == y.ref.path.address)))
-//     }  
-//   }
-
     var defaultBehavior: Option[Behavior[HangmanClient.Command]] = None
     var remoteOpt: Option[ActorRef[HangmanServer.Command]] = None 
     var userOpt: Option[User] = None
@@ -78,7 +56,7 @@ object HangmanClient {
                 lobby.clear()
                 for (room <- newLobby) lobby += room
                 Platform.runLater {
-                        Hangman.getLobbyController.populateLobbyList()
+                    Hangman.getLobbyController.populateLobbyList()
                 }
                 Behaviors.same
             
@@ -115,9 +93,8 @@ object HangmanClient {
                 //chg user object state to "inGame"
                 Platform.runLater {
                     Hangman.getLobbyController.launchGameSession()
-                }
-                //TODO: determine if the line below is needed
-                Hangman.getGameController.setGameState(game)
+                    Hangman.getGameController.setGameState(game)
+                }     
                 userOpt.get.status = "inGame"
                 inGameBehavior()
 
@@ -164,9 +141,8 @@ object HangmanClient {
                 //chg user object state to "inGame"
                 Platform.runLater {
                     Hangman.getLobbyController.launchGameSession()
+                    Hangman.getGameController.setGameState(game)
                 }
-                //TODO: determine if the line below is needed
-                Hangman.getGameController.setGameState(game)
                 userOpt.get.status = "inGame"
                 inGameBehavior()
                 
@@ -197,7 +173,7 @@ object HangmanClient {
                 remoteOpt.get ! HangmanServer.GuessAlphabet(userOpt.get, alphabet)
                 Behaviors.same
 
-            case GameEnded(reason) =>
+            case GameEnded(reason, numberOfCorrectGuesses) =>
                 // Sent from server to clients w/ status won/loss
                 // update the UI to show if the players won/lost/the other player disconnected
                 // the behavior is automatically switched back to lobby behavior. The user will not return to the lobby unless a button is clicked on, 
@@ -205,7 +181,7 @@ object HangmanClient {
                 // chg user object state to "lobby"
                 println(s"game ended: $reason")
                 Platform.runLater{
-                    Hangman.getGameController.quitGame(reason)
+                    Hangman.getGameController.quitGame(reason, numberOfCorrectGuesses)
                 }
                 userOpt.get.status = "lobby"
                 lobbyBehavior()
@@ -225,15 +201,6 @@ object HangmanClient {
     def apply(): Behavior[HangmanClient.Command] =
         Behaviors.setup { context =>
         var counter = 0
-        // (1) a ServiceKey is a unique identifier for this actor
-
-    //    val upnpRef = context.spawn(Upnp(), Upnp.name)
-    //     upnpRef ! AddPortMapping(20000)
-        
-          
-    // val reachabilityAdapter = context.messageAdapter(ReachabilityChange)
-    // Cluster(context.system).subscriptions ! Subscribe(reachabilityAdapter, classOf[ReachabilityEvent])
-
         val listingAdapter: ActorRef[Receptionist.Listing] =
             context.messageAdapter { listing =>
                 println(s"listingAdapter:listing: ${listing.toString}")
@@ -241,7 +208,6 @@ object HangmanClient {
             }
 
         context.system.receptionist ! Receptionist.Subscribe(HangmanServer.ServerKey, listingAdapter)
-        //context.actorOf(RemoteRouterConfig(RoundRobinPool(5), addresses).props(Props[HangmanClient.TestActorClassic]()), "testA")
         defaultBehavior = Some(Behaviors.receiveMessage[HangmanClient.Command] { message =>
             message match {
                 case Start =>
@@ -290,16 +256,7 @@ object HangmanClient {
                         Hangman.getLobbyController.populateLobbyList()
                     }
                     lobbyBehavior()
-
-                // case ReachabilityChange(reachabilityEvent) =>
-                // reachabilityEvent match {
-                //     case UnreachableMember(member) =>
-                //         unreachables += member.address
-                //         Behaviors.same
-                //     case ReachableMember(member) =>
-                //         unreachables -= member.address
-                //         Behaviors.same
-                // }                    
+                 
                 case _=>
                     Behaviors.unhandled
                 
