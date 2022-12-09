@@ -18,7 +18,19 @@ class HowToPlayController(private val playerName: TextField, val usernameTakenEr
   def goToLobby = {
     // Can get the user's name from here
     val name: String = playerName.text.value
-    Hangman.hangmanClient ! HangmanClient.StartLoadLobby(name)
+
+    // check if name is empty
+    if (name.isEmpty) {
+      new Alert(AlertType.Error) {
+        initOwner(stage)
+        title = "Error"
+        headerText = "Error: Name not chosen"
+        contentText = "Hey, you've not chosen a name! Enter a name and click Next again."
+      }.showAndWait()
+    } else {
+      // start lobby
+      Hangman.hangmanClient ! HangmanClient.StartLoadLobby(name)
+    }
   }
 
   //the lobby is not shown until the server replies the client actor with a Lobby msg
