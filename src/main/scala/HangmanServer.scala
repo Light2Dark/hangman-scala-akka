@@ -108,9 +108,10 @@ object HangmanServer {
                 //if the player is in a room, delete the room and inform all users on the main menu about it
                 if (user.status == "inGame") {
                   var game = games.find(ongoingGame => ongoingGame.players.map(player => player.name).contains(user.name)).get
-                  game.players.foreach(player => player.ref ! HangmanClient.GameEnded("The other player disconnected"))
+                  var remainingPlayer = game.players.filter(player => player.name != user.name).head
+                  remainingPlayer.ref ! HangmanClient.GameEnded("The other player disconnected")
                   games -= game
-                  game.players.foreach(player => usersOnMainMenu += player)
+                  usersOnMainMenu += remainingPlayer
                 }
                 else if (user.status == "lobby") {
                   usersOnMainMenu.retain(x => x.name != user.name)
