@@ -109,7 +109,7 @@ object HangmanClient {
                 remoteOpt.get ! HangmanServer.JoinRoom(userOpt.get, room)
                 Behaviors.same
 
-            case GameState(game) =>
+            case GameState(game: Game) =>
                 //this msg serves as an acknowledgement that the user has successfully joined the room
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"
@@ -158,7 +158,7 @@ object HangmanClient {
                 userOpt.get.status = "lobby"
                 lobbyBehavior()
 
-            case GameState(game) =>
+            case GameState(game: Game) =>
                 //this msg is received when someone has joined the room and the game can be started
                 //start the game by showing the in game UI
                 //chg user object state to "inGame"

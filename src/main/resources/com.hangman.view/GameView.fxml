@@ -200,5 +200,6 @@
             </ImageView>
          </children>
       </VBox>
+      <Button layoutX="57.0" layoutY="56.0" mnemonicParsing="false" onAction="#changeButton" text="CHANGE" />
    </children>
 </AnchorPane>
